@@ -1,0 +1,14 @@
+.sidebar {
+    width: 200px;
+    border-right: 1px solid #e0e0e0;
+    height: 100%;
+    position: absolute;
+}
+
+.sidebar .sidebar-item {
+    padding: 20px 0px;
+}
+
+.sidebar-item.active {
+    background-color: rgba(0, 188, 212, 0.22);
+}

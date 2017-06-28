@@ -1,0 +1,12 @@
+.choosingDays {
+    display: flex;
+    width: 350px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.choosingDays > div {
+    width: auto !important;
+}
+.choosingDays > div > div {
+   flex-direction: column-reverse !important;
+}
