@@ -51,7 +51,7 @@ class IconsCategory extends Component {
   componentWillReceiveProps(newProps) {
     if( !newProps.data.loading) {
       const data = this.divideToRoomsSuites(newProps.data.rooms);
-      axios.get(`http://localhost:3004/api/icons/${this.props.hotelID}`, {
+      axios.get(`http://localhost:4040/api/icons/${this.props.hotelID}`, {
         params: {
           rooms: JSON.stringify(data.rooms),
           suites: JSON.stringify(data.suites)
