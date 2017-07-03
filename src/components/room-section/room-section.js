@@ -18,7 +18,10 @@ class RoomSection extends Component {
       this.setState({ rooms: newProps.data.rooms })
     }
   }
-  handleHotelsChange = (event, index, values) => this.setState({ roomCategoryValues: values });
+  handleRoomsChange = (event, index, values) => {
+    this.setState({ roomCategoryValues: values });
+    this.props.updateRule({ key: 'room', sign: 'in array', value: values, factProp: 'room' });
+  }
   
   menuItems(values) {
     return this.state.rooms.map((room) => (
@@ -27,7 +30,7 @@ class RoomSection extends Component {
         insetChildren={true}
         checked={values && values.indexOf(room.roomCategory) > -1}
         value={room.roomCategory}
-        primaryText={room.roomCategory}
+        primaryText={`${room.hotelID} - ${room.roomCategory}`}
       />
     ));
   }
@@ -40,7 +43,7 @@ class RoomSection extends Component {
             multiple={true}
             hintText="Select a room"
             value={this.state.roomCategoryValues}
-            onChange={this.handleHotelsChange}
+            onChange={this.handleRoomsChange}
           >
             {this.menuItems(this.state.roomCategoryValues)}
           </SelectField>
@@ -53,6 +56,7 @@ class RoomSection extends Component {
 const RoomQuery = gql`
   query getRooms($hotelID: ID) {
     rooms(hotelID: $hotelID) {
+      hotelID
       roomCategory
     }  
   }

@@ -47,7 +47,10 @@ class UpsaleCategory extends Component {
     });
   }
 
-  handleHotelsChange = (event, index, values) => this.setState({ hotelvalues: values });
+  handleHotelsChange = (event, index, values) => {
+    this.setState({ hotelvalues: values });
+    this.updateRule({ key: 'hotel', sign: 'in array', value: values, factProp: 'hotel' });
+  }
   
   menuItems(values) {
     return this.state.hotels.map((hotel) => (
@@ -108,6 +111,10 @@ class UpsaleCategory extends Component {
         case 'range in days array': {
           const array = currentItem.value.sort().map(i => DAYS[i]);
           conditions.push(`${currentItem.factProp.min} - ${currentItem.factProp.max} include ${_.join(array, ' / ')}`);
+          break;
+        }
+        case 'in array': {
+          conditions.push(`${currentItem.factProp} is ${_.join(currentItem.value, '/')}`);
           break;
         }
         default: {
