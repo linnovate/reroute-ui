@@ -21,8 +21,7 @@ class UpsaleCategory extends Component {
     super();
     this.state = {
       hotels: [],
-      hotelvalues: [],
-      currentRule: {},
+      currentRule: this.initRuleObj(),
       currentRuleAction: '',
       rules: [],
     }
@@ -34,13 +33,64 @@ class UpsaleCategory extends Component {
       this.setState({ hotels: newProps.data.hotels })
     }
   }
+  initRuleObj() {
+    return {
+        hotel: {
+          value: []
+        },
+        room: {
+          value: []
+        },
+        adults: {
+          value: ''
+        },
+        children: {
+          value: ''
+        },
+        infants: {
+          value: ''
+        },
+        local: {
+          value: ''
+        },
+        'include dates': {
+          value: [{
+            min: null,
+            max:null,
+            focusedInput: null
+          }]
+        },
+        'exclude dates': {
+          value: [{
+            min: null,
+            max:null,
+            focusedInput: null
+          }]
+        },
+        'check in day': {
+          value: []
+        },
+        'check out day': {
+          value: []
+        },
+        'staying days': {
+          value: []
+        },
+        clubMember: {
+          value: ''
+        },
+        plancode : {
+          value: ''
+        }
+    }
+  }
 
   loadRules() {
     axios.get('http://localhost:4040/api/rules')
     .then((response) => {
       this.setState({ 
         rules: response.data,
-        currentRule: {},
+        currentRule: this.initRuleObj(),
         currentRuleAction: ''
       })
     })
@@ -50,7 +100,6 @@ class UpsaleCategory extends Component {
   }
 
   handleHotelsChange = (event, index, values) => {
-    this.setState({ hotelvalues: values });
     this.updateRule({ key: 'hotel', sign: 'in array', value: values, factProp: 'hotel' });
   }
   
@@ -77,7 +126,7 @@ class UpsaleCategory extends Component {
     
   }
   updateRuleAction = (data) => {
-    this.setState({ currentRuleAction: data.specialServiceCode})
+    this.setState({ currentRuleAction: data})
   }
   showCurrentRule = (currentRule, currentRuleAction) => {
     if (Object.keys(currentRule).length === 0) return '';
@@ -133,14 +182,31 @@ class UpsaleCategory extends Component {
 
   saveRule = () => {
     const ruleStr = this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction);
-    axios.post('http://localhost:4040/api/rules', { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
-    .then((response) => {
-      this.loadRules()
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    if (this.state.currentRule._id) {
+      axios.put(`http://localhost:4040/api/rules/${this.state.currentRule._id}`, { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      .then((response) => {
+        this.loadRules()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
+    } else {
+      axios.post('http://localhost:4040/api/rules', { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      .then((response) => {
+        this.loadRules()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
+
+  editRule = (rule) => {
+    const ruleObj = this.initRuleObj();
+    ruleObj._id = rule._id
+    const mergedRule = _.merge({}, ruleObj, rule.ruleObj.conditions);
+    this.setState({ currentRule: mergedRule, currentRuleAction: rule.ruleObj.action });
   }
 
   render() {
@@ -150,36 +216,36 @@ class UpsaleCategory extends Component {
           <SelectField
             multiple={true}
             hintText="Select a hotel"
-            value={this.state.hotelvalues}
+            value={this.state.currentRule.hotel.value}
             onChange={this.handleHotelsChange}
           >
-            {this.menuItems(this.state.hotelvalues)}
+            {this.menuItems(this.state.currentRule.hotel.value)}
           </SelectField>
         </div>
         <Tabs className="tabs">
-          <Tab label="Pax" >
+          <Tab label="Pax">
             <div>
-              <PaxSection updateRule={this.updateRule} />
+              <PaxSection updateRule={this.updateRule} currentRule={this.state.currentRule} />
             </div>
           </Tab>
           <Tab label="Dates" >
             <div>
-              <DatesSection updateRule={this.updateRule} />
+              <DatesSection updateRule={this.updateRule} currentRule={this.state.currentRule} />
             </div>
           </Tab>
           <Tab label="Club Member" >
             <div>
-              <ClubMemberSection updateRule={this.updateRule} />
+              <ClubMemberSection updateRule={this.updateRule} currentRule={this.state.currentRule} />
             </div>
           </Tab>
           <Tab label="Room" >
             <div>
-              <RoomSection hotels={this.state.hotels} selectedHotels={this.state.hotelvalues} updateRule={this.updateRule} />
+              <RoomSection hotels={this.state.hotels} selectedHotels={this.state.currentRule.hotel.value} updateRule={this.updateRule} currentRule={this.state.currentRule} />
             </div>
           </Tab>
           <Tab label="Action" >
             <div>
-              <ActionSection updateRuleAction={this.updateRuleAction} />
+              <ActionSection updateRuleAction={this.updateRuleAction} currentAction={this.state.currentRuleAction} />
             </div>
           </Tab>
         </Tabs>
@@ -190,7 +256,7 @@ class UpsaleCategory extends Component {
         </div>
         <RaisedButton label="Save Rule" onTouchTap={this.saveRule} />
         </div>
-        <RulesList loadRules={this.loadRules} rules={this.state.rules} />
+        <RulesList editRule={this.editRule} loadRules={this.loadRules} rules={this.state.rules} />
       </div>
     );
   }

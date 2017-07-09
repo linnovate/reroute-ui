@@ -4,15 +4,8 @@ import MenuItem from 'material-ui/MenuItem';
 //import './Dates.css';
 
 class ClubMemberSection extends Component {
-  constructor() {
-    super();
-    this.state = {
-      clubMemberValue: '',
-      hotelvalues: [],
-    }
-  }
+  
   handleClubMemberChange = (event, index, value) => {
-    this.setState({ clubMemberValue: value });
     this.props.updateRule({ key: 'clubMember', sign: 'equal', value, factProp: 'clubMember' });
   }
 
@@ -22,7 +15,7 @@ class ClubMemberSection extends Component {
         <div>
           <SelectField
             floatingLabelText="club member"
-            value={this.state.clubMemberValue}
+            value={this.props.currentRule.clubMember.value}
             onChange={this.handleClubMemberChange}
             >
             <MenuItem value={'irrelevant'} primaryText="irrelevant" />

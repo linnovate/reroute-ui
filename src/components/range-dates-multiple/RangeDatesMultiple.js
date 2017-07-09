@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DateRangePicker } from 'react-dates';
+import moment from 'moment';
 import 'react-dates/lib/css/_datepicker.css';
 import './RangeDatesMultiple.css';
 
@@ -9,19 +10,20 @@ class RangeDatesMultiple extends Component {
     super();
 
     this.handleAddRange = this.handleAddRange.bind(this);
-    this.state = {
-      datesValues: [{
-        min: null,
-        max: null,
-        focusedInput: null,
-      }]
-    }
     this.closingFlag = false;
   }
 
   handleAddRange() {
     this.setState({datesValues: [...this.state.datesValues, {min: null, max: null, focusedInput: null }]});
 
+  }
+  componentWillMount() {
+    this.setState({
+      datesValues: this.props.dates
+    })
+  }
+  componentWillReceiveProps(nextProps){
+    this.setState({ datesValues: nextProps.dates })
   }
   onDatesChange = (startDate, endDate, index) => {
     const tmp = this.state.datesValues;
@@ -51,8 +53,8 @@ class RangeDatesMultiple extends Component {
         {this.state.datesValues.map((item, index) =>
           <DateRangePicker
             key={index}
-            startDate={item.min}
-            endDate={item.max}
+            startDate={item.min ? moment(item.min) : item.min}
+            endDate={item.max ? moment(item.max) : item.max}
             onDatesChange={({ startDate, endDate }) => this.onDatesChange(startDate, endDate, index)}
             focusedInput={item.focusedInput}
             onFocusChange={focusedInput => this.onFocusChange(focusedInput, index)}

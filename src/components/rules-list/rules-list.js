@@ -34,7 +34,7 @@ class RulesList extends Component {
               key={index}
               className="listItem"
               primaryText={rule.name} 
-              leftIcon={<div className="actionsIcons"><EditorModeEdit /> <ActionDelete onClick={() => this.deleteRule(rule)} /></div>} 
+              leftIcon={<div className="actionsIcons"><EditorModeEdit onClick={() => this.props.editRule(rule)}/> <ActionDelete onClick={() => this.deleteRule(rule)} /></div>} 
             />
           )}
         </List>

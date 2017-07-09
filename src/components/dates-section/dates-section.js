@@ -14,8 +14,14 @@ class DatesSection extends Component {
       'check out day': [],
       'staying days': []
     }
-
     this.updateDays = this.updateDays.bind(this);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      'check in day': nextProps.currentRule['check in day'].value,
+      'check out day': nextProps.currentRule['check out day'].value,
+      'staying days': nextProps.currentRule['staying days'].value
+    })
   }
   updateRangeDates(field, dates) { 
     if(field === 'include dates') {
@@ -41,12 +47,12 @@ class DatesSection extends Component {
   render() {
     return (
       <div className="DatesRule">
-          EXCLUDE DATES: <RangeDatesMultiple handleCloseDatepicker={(dates) => this.updateRangeDates('exclude dates', dates)} />
-          ON THIS DATES: <RangeDatesMultiple handleCloseDatepicker={(dates) => this.updateRangeDates('include dates', dates)} />
+          EXCLUDE DATES: <RangeDatesMultiple handleCloseDatepicker={(dates) => this.updateRangeDates('exclude dates', dates)} dates={this.props.currentRule['exclude dates'].value}/>
+          ON THIS DATES: <RangeDatesMultiple handleCloseDatepicker={(dates) => this.updateRangeDates('include dates', dates)} dates={this.props.currentRule['include dates'].value}/>
           <div>
-           Check in day: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('check in day', day, 'checkin')}/>
-           Check out day: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('check out day', day, 'checkout')}/>
-           Staying days: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('staying days', day, {min: 'checkin', max: 'checkout'})}/>
+           Check in day: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('check in day', day, 'checkin')} days={this.state['check in day']}/>
+           Check out day: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('check out day', day, 'checkout')} days={this.state['check out day']}/>
+           Staying days: <ChoosingDays handleChooseDay={(day, value) => this.updateDays('staying days', day, {min: 'checkin', max: 'checkout'})} days={this.state['staying days']}/>
           </div>
       </div>
     );

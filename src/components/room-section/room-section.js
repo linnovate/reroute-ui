@@ -9,9 +9,7 @@ class RoomSection extends Component {
   constructor() {
     super();
     this.state = {
-      roomCategoryValues: [],
       rooms: [],
-      plancodeValue: ''
     }
   }
 
@@ -28,7 +26,6 @@ class RoomSection extends Component {
     }
   }
   handleRoomsChange = (event, index, values) => {
-    this.setState({ roomCategoryValues: values });
     this.props.updateRule({ key: 'room', sign: 'in array', value: values, factProp: 'room' });
   }
   
@@ -45,7 +42,6 @@ class RoomSection extends Component {
   }
 
   handlePlancodeChange = (event, index, value) => {
-    this.setState({ plancodeValue: value });
     this.props.updateRule({ key: 'plancode', sign: 'equal', value, factProp: 'plancode' });
   }
 
@@ -56,16 +52,16 @@ class RoomSection extends Component {
           <SelectField
             multiple={true}
             hintText="Select a room"
-            value={this.state.roomCategoryValues}
+            value={this.props.currentRule.room.value}
             onChange={this.handleRoomsChange}
           >
-            {this.menuItems(this.state.roomCategoryValues)}
+            {this.menuItems(this.props.currentRule.room.value)}
           </SelectField>
         </div>
         <div>
           <SelectField
             floatingLabelText="plancode"
-            value={this.state.plancodeValue}
+            value={this.props.currentRule.plancode.value}
             onChange={this.handlePlancodeChange}
             >
             <MenuItem value={'irrelevant'} primaryText="irrelevant" />

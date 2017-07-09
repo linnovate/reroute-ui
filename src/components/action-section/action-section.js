@@ -9,7 +9,6 @@ class ActionSection extends Component {
     super();
     this.state = {
       actions: [],
-      actionValue: '',
     }
   }
   componentWillReceiveProps(newProps) {
@@ -19,7 +18,6 @@ class ActionSection extends Component {
   }
 
   handleActionChange = (event, index, value) => {
-    this.setState({ actionValue: value });
     this.props.updateRuleAction(value);
   }
 
@@ -29,11 +27,11 @@ class ActionSection extends Component {
         <div>
           <SelectField
             floatingLabelText="action"
-            value={this.state.actionValue}
+            value={this.props.currentAction}
             onChange={this.handleActionChange}
             >
             {this.state.actions.map((item, index) =>
-              <MenuItem key={index} value={item} primaryText={item.specialServiceCode} />
+              <MenuItem key={index} value={item.specialServiceCode} primaryText={item.specialServiceCode} />
             )}
           </SelectField>
         </div>
