@@ -72,9 +72,9 @@ class RoomSection extends Component {
             <MenuItem value={'RO'} primaryText="RO" />
             <MenuItem value={'B/B'} primaryText="B/B" />
             <MenuItem value={'BBTR'} primaryText="BBTR" />
-            <MenuItem value={'HB'} primaryText="HB" />
+            <MenuItem value={'H/B'} primaryText="H/B" />
             <MenuItem value={'HBTR'} primaryText="HBTR" />
-            <MenuItem value={'FB'} primaryText="FB" />
+            <MenuItem value={'F/B'} primaryText="F/B" />
             <MenuItem value={'FBTR'} primaryText="FBTR" />
           </SelectField>
         </div>

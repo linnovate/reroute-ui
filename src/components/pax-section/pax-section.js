@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 //import './Dates.css';
 
@@ -7,59 +8,38 @@ class PaxSection extends Component {
   constructor() {
     super();
     this.state = {
-      paxValue: '',
-      infantsValue: '',
-      nationalityValue: ''
+      localValue: ''
     }
   }
-  handlePaxChange = (event, index, value) => {
-    this.setState({ paxValue: value });
-    this.props.updateRule({ key: 'pax', sign: 'equal', value, factProp: 'pax' });
+  handlePaxChange = (event, value) => {
+    this.props.updateRule({ key: event.target.name, sign: 'equal', value, factProp: event.target.name });
   }
-  handleInfantsChange = (event, index, value) => {
-    this.setState({ infantsValue: value });
-    this.props.updateRule({ key: 'infants', sign: 'equal', value, factProp: 'infants' });
-  }
-  handleNationalityChange = (event, index, value) => {
-    this.setState({ nationalityValue: value });
-    this.props.updateRule({ key: 'nationality', sign: 'equal', value, factProp: 'nationality' });
+  handleLocalChange = (event, index, value) => {
+    this.setState({ localValue: value });
+    this.props.updateRule({ key: 'local', sign: 'equal', value, factProp: 'local' });
   }
 
   render() {
     return (
       <div className="PaxSection">
         <div>
-          <SelectField
-            floatingLabelText="pax"
-            value={this.state.paxValue}
-            onChange={this.handlePaxChange}
-            >
-            <MenuItem value={'irrelevant'} primaryText="irrelevant" />
-            <MenuItem value={'alone'} primaryText="alone" />
-            <MenuItem value={'couple'} primaryText="couple" />
-            <MenuItem value={'family'} primaryText="family" />
-          </SelectField>
+          <TextField name="adults" floatingLabelText="Adults" type="number" hintText="Adults" onChange={this.handlePaxChange} />
+        </div>
+        <div>
+          <TextField name="children" floatingLabelText="Children" type="number" hintText="Children" onChange={this.handlePaxChange}/>
+        </div>
+        <div>
+          <TextField name="infants" floatingLabelText="Infants" type="number" hintText="Infants" onChange={this.handlePaxChange}/>
         </div>
         <div>
           <SelectField
-            floatingLabelText="infants"
-            value={this.state.infantsValue}
-            onChange={this.handleInfantsChange}
+            floatingLabelText="local"
+            value={this.state.localValue}
+            onChange={this.handleLocalChange}
             >
             <MenuItem value={'irrelevant'} primaryText="irrelevant" />
             <MenuItem value={true} primaryText="yes" />
             <MenuItem value={false} primaryText="no" />
-          </SelectField>
-        </div>
-        <div>
-          <SelectField
-            floatingLabelText="nationality"
-            value={this.state.nationalityValue}
-            onChange={this.handleNationalityChange}
-            >
-            <MenuItem value={'irrelevant'} primaryText="irrelevant" />
-            <MenuItem value={'hebrew'} primaryText="hebrew" />
-            <MenuItem value={'tourist'} primaryText="tourist" />
           </SelectField>
         </div>
       </div>
