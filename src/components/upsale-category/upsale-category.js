@@ -39,7 +39,9 @@ class UpsaleCategory extends Component {
     axios.get('http://localhost:4040/api/rules')
     .then((response) => {
       this.setState({ 
-        rules: response.data
+        rules: response.data,
+        currentRule: {},
+        currentRuleAction: ''
       })
     })
     .catch(function (error) {
@@ -90,7 +92,7 @@ class UpsaleCategory extends Component {
         case 'in multi range': {
           const range = [];
           currentItem.value.forEach((val) => {
-            range.push(`${currentItem.factProp.min} >= ${new Date(val.min).toLocaleDateString()} AND ${currentItem.factProp.max} <= ${new Date(val.max).toLocaleDateString()}`);
+            range.push(`${currentItem.factProp.min} <= ${new Date(val.max).toLocaleDateString()} AND ${currentItem.factProp.max} >= ${new Date(val.min).toLocaleDateString()}`);
           });
           conditions.push(`(${_.join(range, ' OR ')})`);
           break;
@@ -172,7 +174,7 @@ class UpsaleCategory extends Component {
           </Tab>
           <Tab label="Room" >
             <div>
-              <RoomSection hotelID={`10122`} updateRule={this.updateRule} />
+              <RoomSection hotels={this.state.hotels} selectedHotels={this.state.hotelvalues} updateRule={this.updateRule} />
             </div>
           </Tab>
           <Tab label="Action" >
@@ -199,6 +201,10 @@ const UpsaleQuery = gql`
     hotels {
       hotelID
       name
+      room {
+        roomCategory
+        name
+      }
     }
   }
 `;

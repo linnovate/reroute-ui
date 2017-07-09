@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import { gql, graphql } from 'react-apollo';
+import _ from 'lodash';
 //import './Dates.css';
 
 class RoomSection extends Component {
@@ -9,13 +10,21 @@ class RoomSection extends Component {
     super();
     this.state = {
       roomCategoryValues: [],
-      rooms: []
+      rooms: [],
+      plancodeValue: ''
     }
   }
 
   componentWillReceiveProps(newProps) {
-    if( !newProps.data.loading) {
-      this.setState({ rooms: newProps.data.rooms })
+    if (newProps.selectedHotels !== this.props.selectedHotels) {
+      let rooms = []
+      _.forEach(newProps.selectedHotels, (value) => {
+        const hotel = _.find(this.props.hotels, {hotelID: value});
+        const tmp1 = _.filter(hotel.room,o => o.name !== '');
+        const tmp2 = tmp1.map(item => ({hotelID: hotel.hotelID, hotelName: hotel.name, roomName: item.name, roomCategory: item.roomCategory}));
+         rooms = _.concat(rooms, tmp2);
+      });
+       this.setState({rooms})
     }
   }
   handleRoomsChange = (event, index, values) => {
@@ -26,13 +35,18 @@ class RoomSection extends Component {
   menuItems(values) {
     return this.state.rooms.map((room) => (
       <MenuItem
-        key={room.roomCategory}
+        key={`${room.hotelID}-${room.roomCategory}`}
         insetChildren={true}
-        checked={values && values.indexOf(room.roomCategory) > -1}
-        value={room.roomCategory}
-        primaryText={`${room.hotelID} - ${room.roomCategory}`}
+        checked={values && values.indexOf(`${room.hotelID}-${room.roomCategory}`) > -1}
+        value={`${room.hotelID}-${room.roomCategory}`}
+        primaryText={`${room.hotelName} - ${room.roomName}`}
       />
     ));
+  }
+
+  handlePlancodeChange = (event, index, value) => {
+    this.setState({ plancodeValue: value });
+    this.props.updateRule({ key: 'plancode', sign: 'equal', value, factProp: 'plancode' });
   }
 
   render() {
@@ -48,21 +62,26 @@ class RoomSection extends Component {
             {this.menuItems(this.state.roomCategoryValues)}
           </SelectField>
         </div>
+        <div>
+          <SelectField
+            floatingLabelText="plancode"
+            value={this.state.plancodeValue}
+            onChange={this.handlePlancodeChange}
+            >
+            <MenuItem value={'irrelevant'} primaryText="irrelevant" />
+            <MenuItem value={'RO'} primaryText="RO" />
+            <MenuItem value={'B/B'} primaryText="B/B" />
+            <MenuItem value={'BBTR'} primaryText="BBTR" />
+            <MenuItem value={'HB'} primaryText="HB" />
+            <MenuItem value={'HBTR'} primaryText="HBTR" />
+            <MenuItem value={'FB'} primaryText="FB" />
+            <MenuItem value={'FBTR'} primaryText="FBTR" />
+          </SelectField>
+        </div>
       </div>
     );
   }
 }
 
-const RoomQuery = gql`
-  query getRooms($hotelID: ID) {
-    rooms(hotelID: $hotelID) {
-      hotelID
-      roomCategory
-    }  
-  }
-`;
-
-export default graphql(RoomQuery, {
-  options: ({ hotelID }) => ({ variables: { hotelID: hotelID }}),
-})(RoomSection)
+export default RoomSection;
 

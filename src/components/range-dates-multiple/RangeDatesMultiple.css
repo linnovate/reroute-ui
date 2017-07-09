@@ -9,3 +9,7 @@
 .RangeDatepicker > div:first-child {
     margin-right: 10px;
 }
+
+.rangeDatesMultiple .DateRangePicker__picker {
+    z-index: 999;
+}
