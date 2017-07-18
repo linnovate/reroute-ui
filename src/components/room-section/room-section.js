@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import { gql, graphql } from 'react-apollo';
 import _ from 'lodash';
 //import './Dates.css';
 

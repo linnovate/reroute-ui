@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { gql, graphql } from 'react-apollo';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import _ from 'lodash';
 //import './Dates.css';
 
 class ActionSection extends Component {
@@ -13,7 +14,12 @@ class ActionSection extends Component {
   }
   componentWillReceiveProps(newProps) {
     if (!newProps.data.loading) {
-      this.setState({ actions: newProps.data.specialservice })
+      let arr = newProps.data.specialservice;
+      const { selectedHotels } = newProps;
+      const actions = _.filter(arr, function(n) {
+        return selectedHotels.indexOf(n.hotelID) !== -1;
+      });
+      this.setState({ actions })
     }
   }
 
@@ -44,6 +50,7 @@ const getActions = gql`
   query getActions {
     specialservice {
       specialServiceCode
+      hotelID
     }
   }
 `;

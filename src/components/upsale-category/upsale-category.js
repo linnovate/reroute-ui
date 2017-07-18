@@ -118,8 +118,16 @@ class UpsaleCategory extends Component {
   updateRule = (data) => {
     if (data.value === 'irrelevant') {
       const tmp = this.state.currentRule;
-      delete tmp[data.key];
+      tmp[data.key] = {
+        value: ''
+      };
       this.setState({ currentRule: tmp })
+    } else if (Array.isArray(data.value) && data.value.length === 0) {
+        const tmp = this.state.currentRule;
+        tmp[data.key] = {
+          value: []
+        };
+        this.setState({ currentRule: tmp })
     } else {
       this.setState({ currentRule: Object.assign(this.state.currentRule, {[data.key]: { value: data.value, sign: data.sign, factProp: data.factProp }}) });
     }
@@ -245,7 +253,7 @@ class UpsaleCategory extends Component {
           </Tab>
           <Tab label="Action" >
             <div>
-              <ActionSection updateRuleAction={this.updateRuleAction} currentAction={this.state.currentRuleAction} />
+              <ActionSection selectedHotels={this.state.currentRule.hotel.value} updateRuleAction={this.updateRuleAction} currentAction={this.state.currentRuleAction} />
             </div>
           </Tab>
         </Tabs>

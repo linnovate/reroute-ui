@@ -11,6 +11,8 @@
     "react-addons-shallow-compare": "^15.6.0",
     "react-apollo": "^1.4.2",
     "react-dates": "^12.1.2",
+    "react-dnd": "^2.4.0",
+    "react-dnd-html5-backend": "^2.4.1",
     "react-dom": "^15.6.1",
     "react-tap-event-plugin": "^2.0.1"
   },
