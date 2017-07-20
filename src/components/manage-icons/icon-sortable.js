@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
 import ItemTypes from './item-types';
@@ -61,22 +60,13 @@ const cardTarget = {
 };
 
 class IconSortable extends Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    index: PropTypes.number.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-    id: PropTypes.any.isRequired,
-    moveIcon: PropTypes.func.isRequired,
-  };
-
   render() {
     const { data, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
 
     return connectDragSource(connectDropTarget(
       <div style={{ opacity }}>
-        <img src={data.field_icon} />
+        <img src={data.field_icon} alt="icon" />
         <div>{data.name}</div>
       </div>,
     ));
@@ -93,8 +83,8 @@ const connectSource = (connect, monitor) => ({
 })
 
 export default (
-  DropTarget(ItemTypes.ICON, cardTarget, connectTarget)(
-    DragSource(ItemTypes.ICON, cardSource, connectSource)(
+  DropTarget(ItemTypes.ICONSORT, cardTarget, connectTarget)(
+    DragSource(ItemTypes.ICONSORT, cardSource, connectSource)(
       IconSortable
     )
   )

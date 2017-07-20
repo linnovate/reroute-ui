@@ -149,7 +149,7 @@ class UpsaleCategory extends Component {
         case 'in multi range': {
           const range = [];
           currentItem.value.forEach((val) => {
-            range.push(`${currentItem.factProp.min} <= ${new Date(val.max).toLocaleDateString()} AND ${currentItem.factProp.max} >= ${new Date(val.min).toLocaleDateString()}`);
+            range.push(`${currentItem.factProp.min} >= ${new Date(val.min).toLocaleDateString()} AND ${currentItem.factProp.max} <= ${new Date(val.max).toLocaleDateString()}`);
           });
           conditions.push(`(${_.join(range, ' OR ')})`);
           break;
@@ -191,7 +191,7 @@ class UpsaleCategory extends Component {
   saveRule = () => {
     const ruleStr = this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction);
     if (this.state.currentRule._id) {
-      axios.put(`http://localhost:4040/api/rules/${this.state.currentRule._id}`, { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      axios.put(`http://127.0.0.1:4040/api/rules/${this.state.currentRule._id}`, { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
       .then((response) => {
         this.loadRules()
       })
@@ -200,7 +200,7 @@ class UpsaleCategory extends Component {
       });
 
     } else {
-      axios.post('http://localhost:4040/api/rules', { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      axios.post('http://127.0.0.1:4040/api/rules', { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
       .then((response) => {
         this.loadRules()
       })

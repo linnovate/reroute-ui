@@ -19,7 +19,18 @@ class NewIconsCategory extends Component {
       paxValue: '',
       icons: [],
       rooms: [],
+      pax: []
     }
+  }
+
+  componentWillMount() {
+      axios.get(`http://localhost:4040/api/icons/pax`)
+      .then((response) => {
+        this.setState({ pax: response.data })
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
 
   componentWillReceiveProps(newProps) {
@@ -70,17 +81,15 @@ class NewIconsCategory extends Component {
           value={this.state.paxValue}
           onChange={this.handlePaxChange}
           >
-            <MenuItem value="single" primaryText="Single" />
-            <MenuItem value="double" primaryText="Double" />
-            <MenuItem value="moreThan2" primaryText="More Than 2" />
-            <MenuItem value="family" primaryText="Family" />
-            <MenuItem value="withBabies" primaryText="With Babies" /> 
+          {this.state.pax.map((item, index) => 
+            <MenuItem key={index} value={item} primaryText={item} />
+          )}
         </SelectField>
         <div>
           <RaisedButton label="Manage" disabled={this.state.hotelValue === '' || this.state.paxValue === ''} onTouchTap={this.handleManageBtn} />
         </div>
         <Divider />
-        {this.state.rooms.length > 0 && <ManageIcons rooms={this.state.rooms} icons={this.state.icons} />}
+        {this.state.rooms.length > 0 && <ManageIcons hotel={this.state.hotelValue} pax={this.state.pax} rooms={this.state.rooms} icons={this.state.icons} />}
       </div>
     )
   }
@@ -99,6 +108,7 @@ const HotelsQuery = gql`
     encourageSales(language: "eng") {
       name
       field_icon
+      description__value
   }
   }
 `;

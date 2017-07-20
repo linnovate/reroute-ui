@@ -5,7 +5,7 @@
 
 .container .rooms {
     width: 500px;
-    height: 500px;
+    height: 600px;
     overflow: auto;
     padding: 30px;
     background-color: #c7f0f6;
@@ -70,4 +70,45 @@
 }
 .icons > div img {
     margin-right: 10px;
+}
+
+.icon-draggable {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.icon-draggable .tooltiptext {
+    visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.icon-draggable .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.icon-draggable:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+.actionBtn {
+    margin-bottom: 10px;
 }

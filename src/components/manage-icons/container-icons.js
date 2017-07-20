@@ -6,7 +6,6 @@ class ContainerIcons extends Component {
 
   render() {
     const { icons } = this.props;
-
     return (
       <div className="container-icons">
         {icons.map((icon, i) => (

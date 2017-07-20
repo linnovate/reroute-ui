@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import Card from './card';
-import Box from './box';
+import RoomSortable from './room-sortable';
+import IconDraggable from './icon-draggable';
 
 
-class Container extends Component {
+class ContainerRooms extends Component {
 
   render() {
     const { rooms } = this.props;
@@ -14,18 +14,20 @@ class Container extends Component {
       <div className="container">
         <div className="rooms">
         {rooms.map((room, i) => (
-          <Card
+          <RoomSortable
             key={room._id}
             index={i}
             id={room._id}
-            text={room.roomName}
-            moveCard={this.props.moveRoom}
+            room={room}
+            moveRoom={this.props.moveRoom}
+            handleIconDrop={(item) => this.props.handleIconDrop(item, i)}
+            moveIcon={(dragIndex, hoverIndex) => this.props.moveIcon(dragIndex, hoverIndex, i)}
           />
         ))}
         </div>
         <div className="icons">
         {this.props.icons.map((icon, index) =>
-            <Box key={index} data={icon} />
+            <IconDraggable key={index} data={icon} />
         )}
         </div>
       </div>
@@ -33,4 +35,4 @@ class Container extends Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(Container)
+export default DragDropContext(HTML5Backend)(ContainerRooms)

@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import ItemTypes from './item-types';
 
-
-
-const boxSource = {
+const iconSource = {
   beginDrag(props) {
     return props.data
   }
 };
 
 
-class Box extends Component {
-  static propTypes = {
-    connectDragSource: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired,
-  };
-
+class IconDraggable extends Component {
   render() {
     const { isDragging, connectDragSource } = this.props;
     const { data } = this.props;
@@ -25,9 +17,10 @@ class Box extends Component {
 
     return (
       connectDragSource(
-        <div style={{ opacity }}>
-          <img src={data.field_icon} />
+        <div style={{ opacity }} className="icon-draggable">
+          <img src={data.field_icon} alt="icon" />
           <div>{data.name}</div>
+          <span className="tooltiptext" dangerouslySetInnerHTML={{__html: data.description__value}}></span>
         </div>,
       )
     );
@@ -41,5 +34,5 @@ const connectSource = (connect, monitor) => ({
 })
 
 export default (
-  DragSource(ItemTypes.BOX, boxSource, connectSource)(Box)
+  DragSource(ItemTypes.ICONDRAG, iconSource, connectSource)(IconDraggable)
 )

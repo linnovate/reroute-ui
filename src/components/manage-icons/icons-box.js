@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import ItemTypes from './item-types';
 import ContainerIcons from './container-icons';
@@ -11,12 +10,6 @@ const dustbinTarget = {
 };
 
 class IconsBox extends Component {
-  static propTypes = {
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
-    canDrop: PropTypes.bool.isRequired,
-    onDrop: PropTypes.func.isRequired,
-  };
 
   render() {
     const { isOver, canDrop, connectDropTarget } = this.props;
@@ -44,5 +37,5 @@ const connectTarget = (connect, monitor) => ({
 })
 
 export default (
-  DropTarget(ItemTypes.BOX, dustbinTarget, connectTarget)(IconsBox)
+  DropTarget(ItemTypes.ICONDRAG, dustbinTarget, connectTarget)(IconsBox)
 )

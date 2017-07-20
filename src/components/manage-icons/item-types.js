@@ -1,5 +1,5 @@
 export default {
-  CARD: 'card',
-  BOX: 'box',
-  ICON: 'icon'
+  ICONSORT: 'icon-sort',
+  ICONDRAG: 'icon-drag',
+  ROOM: 'room'
 };
