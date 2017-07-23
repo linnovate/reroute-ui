@@ -1,7 +1,6 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -25,7 +24,7 @@ export default class CopyWeights extends React.Component {
 
   render() {
     let pax = [...this.props.pax];
-    pax.unshift('--all paxes--')
+    //pax.unshift('--all paxes--')
 
     const actions = [
       <FlatButton
