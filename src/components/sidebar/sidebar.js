@@ -18,6 +18,8 @@ class Sidebar extends Component {
         <Divider />
         <div className={`sidebar-item ${this.props.activeItem === 'newIcons' ? 'active' : ''}`} onClick={() => this.props.handleSidebarItemClicked('newIcons')}>icons</div>
         <Divider />
+        <div className={`sidebar-item ${this.props.activeItem === 'sentences' ? 'active' : ''}`} onClick={() => this.props.handleSidebarItemClicked('sentences')}>sentences</div>
+        <Divider />
       </div>
     );
   }

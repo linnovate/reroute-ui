@@ -1,0 +1,19 @@
+.sentence-edit {
+    padding: 50px;
+}
+
+.sentence-edit .tabs > div:first-child {
+    background-color: #c7f0f6 !important;
+}
+
+.sentence-edit .tabs .tab {
+    color: black !important
+}
+
+.sentence-edit .effect-wrapper {
+    display: flex;
+}
+
+.sentence-edit .effect-wrapper > div {
+    margin-right: 20px;
+}
