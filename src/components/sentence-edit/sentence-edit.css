@@ -6,6 +6,9 @@
     background-color: #c7f0f6 !important;
 }
 
+.sentence-edit .tabs {
+    border: 1px solid #c7f0f6;
+}
 .sentence-edit .tabs .tab {
     color: black !important
 }

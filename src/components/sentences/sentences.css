@@ -1,0 +1,20 @@
+.sentences .container .rooms .room {
+    height: auto;
+    padding: 14px 20px;
+}
+.manage-rooms .wrapper-rooms {
+    display: flex;
+    align-items: flex-start;
+}
+
+.manage-rooms .wrapper-rooms > div {
+    margin-left: 20px
+}
+
+.sentences .container .rule {
+    border: 1px dashed black;
+    margin-bottom: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}

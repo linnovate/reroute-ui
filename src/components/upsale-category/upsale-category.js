@@ -86,7 +86,11 @@ class UpsaleCategory extends Component {
   }
 
   loadRules() {
-    axios.get('http://localhost:4040/api/rules')
+    axios.get('http://localhost:4040/api/rules', {
+      params: {
+        type: 'upsales'
+      }
+    })
     .then((response) => {
       this.setState({ 
         rules: response.data,
@@ -200,7 +204,11 @@ class UpsaleCategory extends Component {
       });
 
     } else {
-      axios.post('http://127.0.0.1:4040/api/rules', { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      axios.post('http://127.0.0.1:4040/api/rules', { 
+        ruleName: ruleStr,
+        ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction},
+        type: 'upsales'
+      })
       .then((response) => {
         this.loadRules()
       })

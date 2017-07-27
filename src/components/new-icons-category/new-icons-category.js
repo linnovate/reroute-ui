@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import _ from 'lodash';
 import ManageIcons from '../manage-icons/manage-icons';
+import HotelSelect from '../hotel-select/hotel-select';
 
 import './new-icons-category.css';
 
@@ -19,7 +20,8 @@ class NewIconsCategory extends Component {
       paxValue: '',
       icons: [],
       rooms: [],
-      pax: []
+      pax: [],
+      roomsByHotel: []
     }
   }
 
@@ -35,11 +37,8 @@ class NewIconsCategory extends Component {
 
   componentWillReceiveProps(newProps) {
     if (!newProps.data.loading) {
-      this.setState({ hotels: newProps.data.hotels, icons: newProps.data.encourageSales })
+      this.setState({ icons: newProps.data.encourageSales })
     }
-  }
-  handleHotelChange = (event, index, value) => {
-    this.setState({ hotelValue: value})
   }
 
   handlePaxChange = (event, index, value) => {
@@ -47,35 +46,36 @@ class NewIconsCategory extends Component {
   }
 
   handleManageBtn = () => {
-      const hotel = _.find(this.state.hotels, (o) => o.hotelID === this.state.hotelValue);
+    axios.get(`http://localhost:4040/api/icons?hotelID=${this.state.hotelValue}&pax=${this.state.paxValue}`, {
+      params: {
+        rooms: JSON.stringify(this.state.roomsByHotel),
+        icons: JSON.stringify(this.state.icons)
+      }
+    })
+    .then((response) => {
+      this.setState({ rooms: response.data });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
 
-      axios.get(`http://localhost:4040/api/icons?hotelID=${hotel.hotelID}&pax=${this.state.paxValue}`, {
-        params: {
-          rooms: JSON.stringify(hotel.room),
-          icons: JSON.stringify(this.state.icons)
-        }
-      })
-      .then((response) => {
-        this.setState({ rooms: response.data });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  updateHotel = (data) => {
+    this.setState({ hotelValue: data });
+  }
+
+  updateRooms = (data) => {
+    this.setState({ roomsByHotel: data || [] });
   }
 
   render() {
     return (
       <div>
-        <SelectField
-          className="hotel-select"
-          floatingLabelText="choose hotel"
-          value={this.state.hotelValue}
-          onChange={this.handleHotelChange}
-          >
-          {this.state.hotels.map((item, index) => 
-            <MenuItem key={index} value={item.hotelID} primaryText={item.name} />     
-          )}
-        </SelectField>
+        <HotelSelect 
+          selectedHotel={this.state.hotelValue}
+          updateHotel={this.updateHotel} 
+          updateRooms={this.updateRooms} 
+        />
         <SelectField
           floatingLabelText="choose pax"
           value={this.state.paxValue}
@@ -95,16 +95,8 @@ class NewIconsCategory extends Component {
   }
 }
 
-const HotelsQuery = gql`
+const IconsQuery = gql`
   query getData {
-    hotels {
-      hotelID
-      name
-      room {
-        roomCategory
-        name
-      }
-    }
     encourageSales(language: "eng") {
       name
       field_icon
@@ -113,4 +105,4 @@ const HotelsQuery = gql`
   }
 `;
 
-export default graphql(HotelsQuery)(NewIconsCategory)
+export default graphql(IconsQuery)(NewIconsCategory)

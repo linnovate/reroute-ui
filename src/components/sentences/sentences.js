@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { gql, graphql } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
+import update from 'react/lib/update';
 import _ from 'lodash';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import ManageIcons from '../manage-icons/manage-icons';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 import SentenceEdit from '../sentence-edit/sentence-edit';
+import ManageRooms from './manage-rooms';
+import ContainerRules from './container-rules';
 
+import './sentences.css';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'];
 
@@ -16,8 +21,12 @@ class Sentences extends Component {
     this.state = {
       hotels: [],
       currentRule: this.initRuleObj(),
-      currentRuleAction: this.initRuleActionObj()
+      currentRuleAction: this.initRuleActionObj(),
+      rules: [],
+      available: true
     }
+
+    this.loadRules();
   }
 
 
@@ -47,6 +56,9 @@ class Sentences extends Component {
         hotel: {
           value: []
         },
+        error: {
+          value: ''
+        },
         'include dates': {
           value: [{
             min: null,
@@ -71,6 +83,13 @@ class Sentences extends Component {
           value: []
         },
     }
+  }
+
+  editRule = (rule) => {
+    const ruleObj = this.initRuleObj();
+    ruleObj._id = rule._id
+    const mergedRule = _.merge({}, ruleObj, rule.ruleObj.conditions);
+    this.setState({ currentRule: mergedRule, currentRuleAction: rule.ruleObj.action });
   }
 
   showCurrentRule = (currentRule, currentRuleAction) => {
@@ -132,6 +151,57 @@ class Sentences extends Component {
     return ruleStr;
   }
 
+  saveRule = () => {
+    const ruleStr = this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction);
+    if (this.state.currentRule._id) {
+      axios.put(`http://127.0.0.1:4040/api/rules/${this.state.currentRule._id}`, { 
+        ruleName: ruleStr, 
+        ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} 
+      })
+      .then((response) => {
+        this.loadRules()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    } else {
+      axios.post('http://127.0.0.1:4040/api/rules', { 
+        ruleName: ruleStr, 
+        ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction},
+        type: 'sentences'
+
+      })
+      .then((response) => {
+        this.loadRules()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+  }
+
+  loadRules = (available = this.state.available) => {
+    axios.get('http://localhost:4040/api/rules', {
+      params: {
+        type: 'sentences',
+        available
+      }
+    })
+    .then((response) => {
+      const rule = this.initRuleObj();
+      rule.available = this.state.available
+      this.setState({ 
+        rules: response.data,
+        currentRule: rule,
+        currentRuleAction: this.initRuleActionObj()
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   updateRule = (data) => {
     if (data.value === 'irrelevant') {
       const tmp = this.state.currentRule;
@@ -170,13 +240,55 @@ class Sentences extends Component {
 
   }
 
+  handleTab = (bool) => {
+    const rule = this.initRuleObj();
+    rule.available = bool;
+    this.setState({ currentRule: rule, currentRuleAction: this.initRuleActionObj(), available: bool });
+    this.loadRules(bool);
+  }
+
+  moveRule = (dragIndex, hoverIndex) => {
+    const rules = this.state.rules;
+    const dragRoom = rules[dragIndex];
+
+    this.setState(update(this.state, {
+      rules: {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragRoom],
+        ],
+      },
+    }));
+
+    axios.put(`http://127.0.0.1:4040/api/rules`, { 
+        rules: this.state.rules
+    })
+    .then((response) => {
+      this.loadRules()
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  deleteRule = (rule) => {
+    axios.delete(`http://localhost:4040/api/rules/${rule._id}`)
+      .then((response) => {
+        this.loadRules();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+  }
+
 
 
   render() {
     return (
       <div className="sentences">
         <Tabs className="tabs">
-          <Tab label="Available">
+          <Tab label="Available" onActive={() => this.handleTab(true)}>
             <div>
               <SentenceEdit 
                 currentRule={this.state.currentRule} 
@@ -184,10 +296,11 @@ class Sentences extends Component {
                 updateRule={this.updateRule} 
                 updateRuleAction={this.updateRuleAction} 
                 currentAction={this.state.currentRuleAction}
+                currentTab="available"
               />
             </div>
           </Tab>
-          <Tab label="Not Available" >
+          <Tab label="Not Available" onActive={() => this.handleTab(false)}>
             <div>
               <SentenceEdit 
                 currentRule={this.state.currentRule} 
@@ -195,7 +308,13 @@ class Sentences extends Component {
                 updateRule={this.updateRule} 
                 updateRuleAction={this.updateRuleAction} 
                 currentAction={this.state.currentRuleAction}
+                currentTab="not available"
               />
+            </div>
+          </Tab>
+          <Tab label="Rooms">
+            <div>
+              <ManageRooms />
             </div>
           </Tab>
         </Tabs>
@@ -204,9 +323,9 @@ class Sentences extends Component {
           <div>
             {this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction)}
           </div>
-          {/*<RaisedButton label="Save Rule" onTouchTap={this.saveRule} />*/}
+          <RaisedButton label="Save Rule" onTouchTap={this.saveRule} />
         </div>
-        {/*<RulesList editRule={this.editRule} loadRules={this.loadRules} rules={this.state.rules} />*/}
+        <ContainerRules editRule={this.editRule} deleteRule={this.deleteRule} loadRules={this.loadRules} rules={this.state.rules} moveRule={this.moveRule} />
       </div>
     )
   }
@@ -217,8 +336,13 @@ const HotelsQuery = gql`
     hotels {
       hotelID
       name
+      room {
+        roomCategory
+        name
+      }
     }
   }
 `;
+Sentences =  DragDropContext(HTML5Backend)(Sentences);
 
 export default graphql(HotelsQuery)(Sentences)
