@@ -9,6 +9,7 @@ import * as animations from 'react-animations';
 import DatesSection from '../dates-section/dates-section';
 import AnimationDemo from './animation-demo';
 import ErrorSelect from '../error-select/error-select';
+import HotelSelect from '../hotel-select/hotel-select';
 
 import './sentence-edit.css';
 
@@ -40,30 +41,17 @@ class SentenceEdit extends Component {
     }
   }
 
-
-  menuItems(values) {
-    return this.props.hotels.map((hotel) => (
-      <MenuItem
-        key={hotel.hotelID}
-        insetChildren={true}
-        checked={values && values.indexOf(hotel.hotelID) > -1}
-        value={hotel.hotelID}
-        primaryText={`${hotel.hotelID} - ${hotel.name}`}
-        />
-    ));
-  }
-
-  handleHotelsChange = (event, index, values) => {
-    this.props.updateRule({ key: 'hotel', sign: 'in array', value: values, factProp: 'hotel' });
-  }
-
   handleErrorChange = (event, index, value) => {
-    this.props.updateRule({ key: 'error', sign: 'equal', value, factProp: 'error' });
+    this.props.updateRule({ key: 'error', sign: 'equal or null', value, factProp: 'error' });
   }
 
   handleAnimationChange = (event, index, value) => {
     this.props.updateRuleAction({ key: 'effect', sign: 'equal', value, factProp: 'effect' });
     this.setState({ animationValue: value });
+  }
+
+  updateHotel = (data) => {
+    this.props.updateRule({ key: 'hotel', sign: 'in array', value: data, factProp: 'hotel' });
   }
 
   render() {
@@ -85,14 +73,12 @@ class SentenceEdit extends Component {
             </Tab>
             <Tab label="Hotel" className="tab">
               <div>
-                <SelectField
+                <HotelSelect 
                   multiple={true}
-                  hintText="Select a hotel"
-                  value={this.props.currentRule.hotel.value}
-                  onChange={this.handleHotelsChange}
-                  >
-                  {this.menuItems(this.props.currentRule.hotel.value)}
-                </SelectField>
+                  selectedHotel={this.props.currentRule.hotel.value}
+                  updateHotel={this.updateHotel} 
+                  updateRooms={() => {}} 
+                />
               </div>
             </Tab>
             <Tab label="Action" className="tab">

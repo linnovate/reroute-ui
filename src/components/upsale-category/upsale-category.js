@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import { gql, graphql } from 'react-apollo';
 import _ from 'lodash';
-import SelectField from 'material-ui/SelectField';
 import RaisedButton from 'material-ui/RaisedButton';
-import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import DatesSection from '../dates-section/dates-section';
 import PaxSection from '../pax-section/pax-section';
@@ -12,6 +9,7 @@ import ClubMemberSection from '../club-member-section/club-member-section';
 import ActionSection from '../action-section/action-section';
 import RoomSection from '../room-section/room-section';
 import RulesList from '../rules-list/rules-list';
+import HotelSelect from '../hotel-select/hotel-select';
 import './upsale-category.css';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'];
@@ -20,7 +18,7 @@ class UpsaleCategory extends Component {
   constructor() {
     super();
     this.state = {
-      hotels: [],
+      roomsByHotel: [],
       currentRule: this.initRuleObj(),
       currentRuleAction: '',
       rules: [],
@@ -28,11 +26,7 @@ class UpsaleCategory extends Component {
     this.loadRules = this.loadRules.bind(this);
     this.loadRules();
   }
-  componentWillReceiveProps(newProps) {
-    if( !newProps.data.loading) {
-      this.setState({ hotels: newProps.data.hotels })
-    }
-  }
+
   initRuleObj() {
     return {
         hotel: {
@@ -103,22 +97,10 @@ class UpsaleCategory extends Component {
     });
   }
 
-  handleHotelsChange = (event, index, values) => {
-    this.updateRule({ key: 'hotel', sign: 'in array', value: values, factProp: 'hotel' });
+  updateHotel = (data) => {
+    this.updateRule({ key: 'hotel', sign: 'in array', value: data, factProp: 'hotel' });
   }
   
-  menuItems(values) {
-    return this.state.hotels.map((hotel) => (
-      <MenuItem
-        key={hotel.hotelID}
-        insetChildren={true}
-        checked={values && values.indexOf(hotel.hotelID) > -1}
-        value={hotel.hotelID}
-        primaryText={`${hotel.hotelID} - ${hotel.name}`}
-      />
-    ));
-  }
-
   updateRule = (data) => {
     if (data.value === 'irrelevant') {
       const tmp = this.state.currentRule;
@@ -225,18 +207,20 @@ class UpsaleCategory extends Component {
     this.setState({ currentRule: mergedRule, currentRuleAction: rule.ruleObj.action });
   }
 
+  updateRooms = (data) => {
+    this.setState({ roomsByHotel: data || [] });
+  }
+
   render() {
     return (
       <div className="UpsaleCategory">
         <div>
-          <SelectField
+          <HotelSelect 
             multiple={true}
-            hintText="Select a hotel"
-            value={this.state.currentRule.hotel.value}
-            onChange={this.handleHotelsChange}
-          >
-            {this.menuItems(this.state.currentRule.hotel.value)}
-          </SelectField>
+            selectedHotel={this.state.currentRule.hotel.value}
+            updateHotel={this.updateHotel} 
+            updateRooms={this.updateRooms} 
+          />
         </div>
         <Tabs className="tabs">
           <Tab label="Pax">
@@ -256,7 +240,7 @@ class UpsaleCategory extends Component {
           </Tab>
           <Tab label="Room" >
             <div>
-              <RoomSection hotels={this.state.hotels} selectedHotels={this.state.currentRule.hotel.value} updateRule={this.updateRule} currentRule={this.state.currentRule} />
+              <RoomSection roomsByHotel={this.state.roomsByHotel} selectedHotels={this.state.currentRule.hotel.value} updateRule={this.updateRule} currentRule={this.state.currentRule} />
             </div>
           </Tab>
           <Tab label="Action" >
@@ -278,17 +262,4 @@ class UpsaleCategory extends Component {
   }
 }
 
-const UpsaleQuery = gql`
-  query getData {
-    hotels {
-      hotelID
-      name
-      room {
-        roomCategory
-        name
-      }
-    }
-  }
-`;
-
-export default graphql(UpsaleQuery)(UpsaleCategory)
+export default UpsaleCategory

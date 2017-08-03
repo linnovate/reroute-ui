@@ -5,7 +5,6 @@ import Divider from 'material-ui/Divider';
 import { gql, graphql } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
-import _ from 'lodash';
 import ManageIcons from '../manage-icons/manage-icons';
 import HotelSelect from '../hotel-select/hotel-select';
 

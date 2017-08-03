@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { gql, graphql } from 'react-apollo';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import update from 'react/lib/update';
@@ -19,7 +18,6 @@ class Sentences extends Component {
   constructor() {
     super();
     this.state = {
-      hotels: [],
       currentRule: this.initRuleObj(),
       currentRuleAction: this.initRuleActionObj(),
       rules: [],
@@ -27,13 +25,6 @@ class Sentences extends Component {
     }
 
     this.loadRules();
-  }
-
-
-  componentWillReceiveProps(newProps) {
-    if (!newProps.data.loading) {
-      this.setState({ hotels: newProps.data.hotels })
-    }
   }
 
   initRuleActionObj() {
@@ -99,6 +90,10 @@ class Sentences extends Component {
       const currentItem = currentRule[item];
       switch (currentItem.sign) {
         case 'equal': {
+          conditions.push(`${currentItem.factProp} = ${currentItem.value}`);
+          break;
+        }
+        case 'equal or null': {
           conditions.push(`${currentItem.factProp} = ${currentItem.value}`);
           break;
         }
@@ -292,7 +287,6 @@ class Sentences extends Component {
             <div>
               <SentenceEdit 
                 currentRule={this.state.currentRule} 
-                hotels={this.state.hotels} 
                 updateRule={this.updateRule} 
                 updateRuleAction={this.updateRuleAction} 
                 currentAction={this.state.currentRuleAction}
@@ -304,7 +298,6 @@ class Sentences extends Component {
             <div>
               <SentenceEdit 
                 currentRule={this.state.currentRule} 
-                hotels={this.state.hotels} 
                 updateRule={this.updateRule} 
                 updateRuleAction={this.updateRuleAction} 
                 currentAction={this.state.currentRuleAction}
@@ -331,18 +324,4 @@ class Sentences extends Component {
   }
 }
 
-const HotelsQuery = gql`
-  query getData {
-    hotels {
-      hotelID
-      name
-      room {
-        roomCategory
-        name
-      }
-    }
-  }
-`;
-Sentences =  DragDropContext(HTML5Backend)(Sentences);
-
-export default graphql(HotelsQuery)(Sentences)
+export default DragDropContext(HTML5Backend)(Sentences);

@@ -1,41 +1,21 @@
 import React, { Component } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import _ from 'lodash';
-//import './Dates.css';
 
 class RoomSection extends Component {
-  constructor() {
-    super();
-    this.state = {
-      rooms: [],
-    }
-  }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.selectedHotels !== this.props.selectedHotels) {
-      let rooms = []
-      _.forEach(newProps.selectedHotels, (value) => {
-        const hotel = _.find(this.props.hotels, {hotelID: value});
-        const tmp1 = _.filter(hotel.room,o => o.name !== '');
-        const tmp2 = tmp1.map(item => ({hotelID: hotel.hotelID, hotelName: hotel.name, roomName: item.name, roomCategory: item.roomCategory}));
-         rooms = _.concat(rooms, tmp2);
-      });
-       this.setState({rooms})
-    }
-  }
   handleRoomsChange = (event, index, values) => {
     this.props.updateRule({ key: 'room', sign: 'in array', value: values, factProp: 'room' });
   }
   
   menuItems(values) {
-    return this.state.rooms.map((room) => (
+    return this.props.roomsByHotel.map((room) => (
       <MenuItem
         key={`${room.hotelID}-${room.roomCategory}`}
         insetChildren={true}
         checked={values && values.indexOf(`${room.hotelID}-${room.roomCategory}`) > -1}
         value={`${room.hotelID}-${room.roomCategory}`}
-        primaryText={`${room.hotelName} - ${room.roomName}`}
+        primaryText={`${room.hotelName} - ${room.name}`}
       />
     ));
   }
