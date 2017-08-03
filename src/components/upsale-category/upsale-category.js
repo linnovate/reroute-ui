@@ -10,6 +10,7 @@ import ActionSection from '../action-section/action-section';
 import RoomSection from '../room-section/room-section';
 import RulesList from '../rules-list/rules-list';
 import HotelSelect from '../hotel-select/hotel-select';
+import config from '../../config'
 import './upsale-category.css';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'];
@@ -80,7 +81,7 @@ class UpsaleCategory extends Component {
   }
 
   loadRules() {
-    axios.get('http://localhost:4040/api/rules', {
+    axios.get(`${config.ruleServer}api/rules`, {
       params: {
         type: 'upsales'
       }
@@ -177,7 +178,7 @@ class UpsaleCategory extends Component {
   saveRule = () => {
     const ruleStr = this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction);
     if (this.state.currentRule._id) {
-      axios.put(`http://127.0.0.1:4040/api/rules/${this.state.currentRule._id}`, { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
+      axios.put(`${config.ruleServer}api/rules/${this.state.currentRule._id}`, { ruleName: ruleStr, ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} })
       .then((response) => {
         this.loadRules()
       })
@@ -186,7 +187,7 @@ class UpsaleCategory extends Component {
       });
 
     } else {
-      axios.post('http://127.0.0.1:4040/api/rules', { 
+      axios.post(`${config.ruleServer}api/rules`, { 
         ruleName: ruleStr,
         ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction},
         type: 'upsales'

@@ -4,6 +4,8 @@ import ContainerRooms from './container-rooms';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import HotelSelect from '../hotel-select/hotel-select';
+import config from '../../config';
+
 
 class ManageRooms extends Component {
 
@@ -30,7 +32,7 @@ class ManageRooms extends Component {
   }
 
   save = () => {
-    axios.post('http://localhost:4040/api/rooms', { 
+    axios.post(`${config.ruleServer}api/rooms`, { 
       rooms: this.state.selectedRooms
     })
     .then((response) => {
@@ -50,7 +52,7 @@ class ManageRooms extends Component {
     if (!data) {
       this.setState({ selectedRooms: [] });
     } else {
-      axios.get(`http://localhost:4040/api/rooms?hotelID=${this.state.selectedHotel}`, {
+      axios.get(`${config.ruleServer}api/rooms?hotelID=${this.state.selectedHotel}`, {
           params: {
             rooms: JSON.stringify(data),
           }

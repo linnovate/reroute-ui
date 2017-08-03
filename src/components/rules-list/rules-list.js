@@ -3,6 +3,7 @@ import {List, ListItem} from 'material-ui/List';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import Subheader from 'material-ui/Subheader';
+import config from '../../config'
 import axios from 'axios';
 
 import './rules-list.css';
@@ -14,7 +15,7 @@ class RulesList extends Component {
     }
   }
   deleteRule(rule) {
-    axios.delete(`http://localhost:4040/api/rules/${rule._id}`)
+    axios.delete(`${config.ruleServer}api/rules/${rule._id}`)
       .then((response) => {
         this.props.loadRules();
       })

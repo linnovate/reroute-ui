@@ -9,6 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import SentenceEdit from '../sentence-edit/sentence-edit';
 import ManageRooms from './manage-rooms';
 import ContainerRules from './container-rules';
+import config from '../../config';
 
 import './sentences.css';
 
@@ -149,7 +150,7 @@ class Sentences extends Component {
   saveRule = () => {
     const ruleStr = this.showCurrentRule(this.state.currentRule, this.state.currentRuleAction);
     if (this.state.currentRule._id) {
-      axios.put(`http://127.0.0.1:4040/api/rules/${this.state.currentRule._id}`, { 
+      axios.put(`${config.ruleServer}api/rules/${this.state.currentRule._id}`, { 
         ruleName: ruleStr, 
         ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction} 
       })
@@ -161,7 +162,7 @@ class Sentences extends Component {
       });
 
     } else {
-      axios.post('http://127.0.0.1:4040/api/rules', { 
+      axios.post(`${config.ruleServer}api/rules`, { 
         ruleName: ruleStr, 
         ruleObj: {conditions: this.state.currentRule, action: this.state.currentRuleAction},
         type: 'sentences'
@@ -177,7 +178,7 @@ class Sentences extends Component {
   }
 
   loadRules = (available = this.state.available) => {
-    axios.get('http://localhost:4040/api/rules', {
+    axios.get(`${config.ruleServer}api/rules`, {
       params: {
         type: 'sentences',
         available
@@ -255,7 +256,7 @@ class Sentences extends Component {
       },
     }));
 
-    axios.put(`http://127.0.0.1:4040/api/rules`, { 
+    axios.put(`${config.ruleServer}api/rules`, { 
         rules: this.state.rules
     })
     .then((response) => {
@@ -267,7 +268,7 @@ class Sentences extends Component {
   }
 
   deleteRule = (rule) => {
-    axios.delete(`http://localhost:4040/api/rules/${rule._id}`)
+    axios.delete(`${config.ruleServer}api/rules/${rule._id}`)
       .then((response) => {
         this.loadRules();
       })

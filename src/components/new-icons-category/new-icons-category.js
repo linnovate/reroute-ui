@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import ManageIcons from '../manage-icons/manage-icons';
 import HotelSelect from '../hotel-select/hotel-select';
+import config from '../../config';
 
 import './new-icons-category.css';
 
@@ -25,7 +26,7 @@ class NewIconsCategory extends Component {
   }
 
   componentWillMount() {
-      axios.get(`http://localhost:4040/api/icons/pax`)
+      axios.get(`${config.ruleServer}api/icons/pax`)
       .then((response) => {
         this.setState({ pax: response.data })
       })
@@ -45,7 +46,7 @@ class NewIconsCategory extends Component {
   }
 
   handleManageBtn = () => {
-    axios.get(`http://localhost:4040/api/icons?hotelID=${this.state.hotelValue}&pax=${this.state.paxValue}`, {
+    axios.get(`${config.ruleServer}api/icons?hotelID=${this.state.hotelValue}&pax=${this.state.paxValue}`, {
       params: {
         rooms: JSON.stringify(this.state.roomsByHotel),
         icons: JSON.stringify(this.state.icons)

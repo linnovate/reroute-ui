@@ -7,10 +7,11 @@ import IconsCategory from './components/icons-category/icons-category';
 import UpsaleCategory from './components/upsale-category/upsale-category';
 import NewIconsCategory from './components/new-icons-category/new-icons-category';
 import Sentences from './components/sentences/sentences';
+import config from './config';
 import './App.css';
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:8080/graphql'
+  uri: config.graphql
 });
 const client = new ApolloClient({
   networkInterface: networkInterface

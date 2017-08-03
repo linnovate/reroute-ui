@@ -4,6 +4,7 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import axios from 'axios';
 import { gql, graphql } from 'react-apollo';
+import config from '../../config';
 
 import './icons-category.css';
 
@@ -51,7 +52,7 @@ class IconsCategory extends Component {
   componentWillReceiveProps(newProps) {
     if( !newProps.data.loading) {
       const data = this.divideToRoomsSuites(newProps.data.rooms);
-      axios.get(`http://localhost:4040/api/icons/${this.props.hotelID}`, {
+      axios.get(`${config.ruleServer}api/icons/${this.props.hotelID}`, {
         params: {
           rooms: JSON.stringify(data.rooms),
           suites: JSON.stringify(data.suites)

@@ -4,6 +4,7 @@ import ContainerRooms from './container-rooms';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios';
 import _ from 'lodash';
+import config from '../../config';
 import CopyWeights from '../copy-weights/copy-weights';
 import './manage-icons.css';
 
@@ -73,7 +74,7 @@ class ManageIcons extends Component {
   }
 
   save = () => {
-    axios.post('http://localhost:4040/api/icons', { 
+    axios.post(`${config.ruleServer}api/icons`, { 
       rooms: this.state.rooms
     })
     .then((response) => {
@@ -103,7 +104,7 @@ class ManageIcons extends Component {
 
   copyWeights = (pax) => {
     this.handleModalClose();
-    axios.post('http://localhost:4040/api/icons/copy', { 
+    axios.post(`${config.ruleServer}api/icons/copy`, { 
       hotelID: this.props.hotel,
       rooms: this.state.rooms,
       pax
