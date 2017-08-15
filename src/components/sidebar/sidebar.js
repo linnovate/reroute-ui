@@ -20,6 +20,8 @@ class Sidebar extends Component {
         <Divider />
         <div className={`sidebar-item ${this.props.activeItem === 'sentences' ? 'active' : ''}`} onClick={() => this.props.handleSidebarItemClicked('sentences')}>sentences</div>
         <Divider />
+        <div className={`sidebar-item ${this.props.activeItem === 'triggers' ? 'active' : ''}`} onClick={() => this.props.handleSidebarItemClicked('triggers')}>triggers</div>
+        <Divider />
       </div>
     );
   }
