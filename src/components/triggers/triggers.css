@@ -1,3 +1,11 @@
 .triggers {
     text-align: left;
 }
+
+.triggers .wrapper-trigger {
+    display: flex;
+    align-items: center;
+}
+.triggers .wrapper-trigger > div {
+    width: 50% !important;
+}
