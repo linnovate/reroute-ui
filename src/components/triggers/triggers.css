@@ -5,7 +5,9 @@
 .triggers .wrapper-trigger {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
-.triggers .wrapper-trigger > div {
-    width: 50% !important;
+
+.triggers .show-multi {
+    width: 200px !important;
 }
