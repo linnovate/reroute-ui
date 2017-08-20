@@ -33,6 +33,9 @@ class Sentences extends Component {
       sentence: {
         value: ''
       },
+      sentenceEng: {
+        value: ''
+      },
       color: {
         value: ''
       },
@@ -134,7 +137,7 @@ class Sentences extends Component {
       }
     });
     let ruleStr = `WHEN ${_.join(conditions, ' AND ')}`;
-    if (currentRuleAction.sentence.value !== '') {
+    if (currentRuleAction.sentence.value !== '' || currentRuleAction.sentenceEng.value !== '') {
       const conditions = [];
       Object.keys(currentRuleAction).forEach((item) => {
         const currentItem = currentRuleAction[item];

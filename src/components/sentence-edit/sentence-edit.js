@@ -93,6 +93,15 @@ class SentenceEdit extends Component {
                     />
                 </div>
                 <div>
+                  <TextField
+                    floatingLabelText="sentence in Eng"
+                    hintText="enter entence in Eng"
+                    value={this.props.currentAction.sentenceEng.value}
+                    onChange={(event, value) =>
+                      this.props.updateRuleAction({ key: 'sentenceEng', sign: 'equal', value, factProp: 'sentenceEng' })}
+                    />
+                </div>
+                <div>
                   <ColorPicker
                     hintText="choose color"
                     name='color'
