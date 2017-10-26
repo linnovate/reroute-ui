@@ -8,6 +8,7 @@
     "material-ui": "^0.18.3",
     "material-ui-color-picker": "^1.0.1",
     "moment": "^2.18.1",
+    "prop-types": "^15.6.0",
     "radium": "^0.19.4",
     "react": "^15.6.1",
     "react-addons-shallow-compare": "^15.6.0",
