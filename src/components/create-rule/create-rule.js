@@ -20,26 +20,7 @@ class CreateRule extends Component {
     this.state = {
     };
   }
-  componentWillReceiveProps(nextProps) {
-  }
-  // updateRangeDates(field, dates) {
-  //   if (field === 'include dates') {
-  //     this.props.updateRule({ key: 'include dates', sign: 'in multi range', value: dates, factProp: { min: 'checkin', max: 'checkout' } });
-  //   } else if (field === 'exclude dates') {
-  //     this.props.updateRule({ key: 'exclude dates', sign: 'not in multi range', value: dates, factProp: { min: 'checkin', max: 'checkout' } });
-  //   }
-  // }
-  // updateDays(field, day, factProp) {
-  //   const array = this.state[field];
-  //   const removed = _.remove(array, n => n === day);
-  //   if (removed.length === 0) {
-  //     array.push(day);
-  //   }
-  //   this.setState({ [field]: array });
-  //   if (field === 'staying days') {
-  //     this.props.updateRule({ key: field, sign: 'range in days array', value: array, factProp });
-  //   } else this.props.updateRule({ key: field, sign: 'in days array', value: array, factProp });
-  // }
+
   render() {
     return (
       <div className="create-rule">
