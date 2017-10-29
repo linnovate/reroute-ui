@@ -45,6 +45,7 @@ class Actions extends Component {
   handleOpen = (action, index) => {
     const name = action.name;
     const data = action.data;
+    if (!this.actionsComponents[name]) return;
     const ActionComponent = this.actionsComponents[name].component;
     this.setState({
       currentActionIndex: index,
