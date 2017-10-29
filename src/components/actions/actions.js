@@ -56,7 +56,6 @@ class Actions extends Component {
   };
 
   updateRuleActionData = () => {
-    console.log({ name: this.state.currentAction.name, data: this.state.currentAction.data, arrayIndex: this.state.currentActionIndex }, 'dddddddd');
     this.props.updateRule('update', 'action', { name: this.state.currentAction.name, data: this.state.currentAction.data, arrayIndex: this.state.currentAction.currentActionIndex });
     this.handleClose();
   }
