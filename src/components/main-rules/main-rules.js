@@ -64,11 +64,17 @@ class MainRulesView extends Component {
   loadRules() {
     axios.get(`${config.ruleServer}api/rules`)
     .then((response) => {
+      const currentRule = this.initRuleObj();
+      currentRule.updateExistingValues = true;
       this.setState({
         rules: response.data,
-        currentRule: this.initRuleObj(),
+        currentRule,
         currentRuleStr: '',
       });
+      setTimeout(() => {
+        currentRule.updateExistingValues = false;
+        this.setState({ currentRule,});
+      }, 0);
     })
     .catch((error) => {
       console.log(error);
@@ -234,7 +240,7 @@ class MainRulesView extends Component {
     return (
       <div className="main-rules">
         <CreateRule updateRuleAction={this.updateRuleAction} updateRule={this.updateRule} currentRule={this.state.currentRule} />
-        <RaisedButton label="Save Rule" onTouchTap={this.saveRule} />
+        <RaisedButton disabled={!this.state.currentRule.actions[0].name || !this.state.currentRule.conditions[0].key || !this.state.currentRule.conditions[0].value} label="Save Rule" onTouchTap={this.saveRule}/>
 
         {this.state.currentRuleStr && <Subheader style={headerStyle}>Current Rule Name</Subheader>}
         <div className>{this.state.currentRuleStr}</div>
