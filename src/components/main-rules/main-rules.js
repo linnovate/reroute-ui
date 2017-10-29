@@ -96,7 +96,6 @@ class MainRulesView extends Component {
   }
 
   updateCurrentRuleStr(currentRule) {
-    if (currentRule.conditions[0].key === '' || currentRule.conditions[0].value === '') return '';
     const conditions = [];
     currentRule.conditions.forEach((item) => {
       const currentItem = item;
@@ -158,11 +157,12 @@ class MainRulesView extends Component {
         break;
       case 'update':
         this.updateItem(type, data);
+        this.updateCurrentRuleStr(this.state.currentRule);
         break;
       default:
         console.log('action is missing');
     }
-    this.updateCurrentRuleStr(this.state.currentRule);
+    
     // if (data.value === 'irrelevant') {
     //   const tmp = this.state.currentRule;
     //   tmp[data.key] = {
@@ -211,8 +211,13 @@ class MainRulesView extends Component {
     const ruleObj = this.initRuleObj();
     ruleObj._id = rule._id;
     const mergedRule = _.merge({}, ruleObj, rule.ruleObj);
-    this.setState({ currentRule: mergedRule });
+    mergedRule.updateExistingValues = true;
+    this.setState({ currentRule: mergedRule,});
     this.updateCurrentRuleStr(mergedRule);
+    setTimeout(() => {
+      mergedRule.updateExistingValues = false;
+      this.setState({ currentRule: mergedRule,});
+    }, 0);
   }
 
   deleteRule(rule) {
@@ -228,7 +233,7 @@ class MainRulesView extends Component {
   render() {
     return (
       <div className="main-rules">
-        <CreateRule updateRuleAction={this.updateRuleAction} currentAction={this.state.currentRuleAction} updateRule={this.updateRule} currentRule={this.state.currentRule} />
+        <CreateRule updateRuleAction={this.updateRuleAction} updateRule={this.updateRule} currentRule={this.state.currentRule} />
         <RaisedButton label="Save Rule" onTouchTap={this.saveRule} />
 
         {this.state.currentRuleStr && <Subheader style={headerStyle}>Current Rule Name</Subheader>}

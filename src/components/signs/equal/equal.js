@@ -17,14 +17,20 @@ class EqualSign extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleInputChange(event, newVal) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentRule.updateExistingValues) {
+      this.setState({
+        dataKey: nextProps.currentRule.conditions[nextProps.arrayIndex].key,
+        dataValue: nextProps.currentRule.conditions[nextProps.arrayIndex].value,
+      });
+    }
+  }
 
+  handleInputChange(event, newVal) {
     this.setState({
       [event.target.name]: newVal,
     }, function afterValuesChange() {
-      if (this.state.dataKey && this.state.dataValue) {
-        this.props.updateRule('update', 'condition', { key: this.state.dataKey, sign: 'equal', value: this.state.dataValue, factProp: this.state.dataKey, arrayIndex: this.props.arrayIndex });
-      }
+      this.props.updateRule('update', 'condition', { key: this.state.dataKey, sign: 'equal', value: this.state.dataValue, factProp: this.state.dataKey, arrayIndex: this.props.arrayIndex });
     });
   }
 
