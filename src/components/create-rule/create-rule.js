@@ -47,7 +47,7 @@ class CreateRule extends Component {
           <Tab label="Conditions">
             <div className="wrapper-conditions">
               {this.props.currentRule.conditions.map((condition, index) =>
-                <EqualSign key={condition.key} currentAction={this.state.currentRuleAction} updateRule={this.props.updateRule} currentRule={this.props.currentRule} arrayIndex={index} />,
+                <EqualSign key={index} currentAction={this.state.currentRuleAction} updateRule={this.props.updateRule} currentRule={this.props.currentRule} arrayIndex={index} />,
               )}
             </div>
             <FloatingActionButton mini style={style} onClick={() => this.props.updateRule('add', 'condition')}>

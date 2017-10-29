@@ -10,31 +10,22 @@ class EqualSign extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      key: this.props.currentRule.conditions[this.props.arrayIndex].key,
-      value: this.props.currentRule.conditions[this.props.arrayIndex].value,
+      dataKey: this.props.currentRule.conditions[this.props.arrayIndex].key,
+      dataValue: this.props.currentRule.conditions[this.props.arrayIndex].value,
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  // handlePaxChange = (event, value) => {
-  //   this.props.updateRule({ key: event.target.name, sign: 'equal', value, factProp: event.target.name });
-  // }
-  // handleLocalChange = (event, index, value) => {
-  //   this.props.updateRule({ key: 'local', sign: 'equal', value, factProp: 'local' });
-  // }
-
-  // handleTypeChange = (event, index, type) => {
-  //   this.setState({ type, });
-  // }
-
   handleInputChange(event, newVal) {
+
     this.setState({
       [event.target.name]: newVal,
+    }, function afterValuesChange() {
+      if (this.state.dataKey && this.state.dataValue) {
+        this.props.updateRule('update', 'condition', { key: this.state.dataKey, sign: 'equal', value: this.state.dataValue, factProp: this.state.dataKey, arrayIndex: this.props.arrayIndex });
+      }
     });
-    if (this.state.key && this.state.value) {
-      this.props.updateRule('update', 'condition', { key: this.state.key, sign: 'equal', value: this.state.value, factProp: this.state.key, arrayIndex: this.props.arrayIndex });
-    }
   }
 
   render() {
@@ -51,9 +42,9 @@ class EqualSign extends Component {
         </SelectField> */}
         </div>
         <div>
-          <TextField value={this.state.key} name="key" floatingLabelText="Key" type="text" hintText="Key" onChange={this.handleInputChange} />
+          <TextField name="dataKey" value={this.state.dataKey}  floatingLabelText="Key" type="text" hintText="Key" onChange={this.handleInputChange} />
           <span className="sign">=</span>
-          <TextField name="value" value={this.state.value} floatingLabelText="Value" type="text" hintText="Value" onChange={this.handleInputChange} />
+          <TextField name="dataValue" value={this.state.dataValue} floatingLabelText="Value" type="text" hintText="Value" onChange={this.handleInputChange} />
         </div>
 
       </div>
