@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.4.0 (c7964e7)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: rules-client
+  name: rules-client
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: rules-client
+    spec:
+      containers:
+      - args:
+        - node
+        - server
+        env:
+        - name: PORT
+          value: "9000"
+        image: localhost:5000/rules-client
+        name: rules-client
+        ports:
+        - containerPort: 9000
+        resources: {}
+        workingDir: /usr/src/app
+      restartPolicy: Always
+status: {}
