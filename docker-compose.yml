@@ -17,3 +17,4 @@ services:
     # Overwrite any env var defined in .env file (if required)
     environment:
       - PORT=9000
+      - RULES_API=http://rules-api:4040
