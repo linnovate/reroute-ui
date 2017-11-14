@@ -2,12 +2,12 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert
+    kompose.cmd: kompose convert -c
     kompose.version: 1.4.0 (c7964e7)
   creationTimestamp: null
   labels:
-    io.kompose.service: rules-client
-  name: rules-client
+    io.kompose.service: rules-ui
+  name: rules-ui
 spec:
   replicas: 1
   strategy: {}
@@ -15,7 +15,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        io.kompose.service: rules-client
+        io.kompose.service: rules-ui
     spec:
       containers:
       - args:
@@ -24,8 +24,10 @@ spec:
         env:
         - name: PORT
           value: "9000"
-        image: localhost:5000/rules-client
-        name: rules-client
+        - name: RULES_API
+          value: http://rules-api:4040
+        image: localhost:5000/rules-ui
+        name: rules-ui
         ports:
         - containerPort: 9000
         resources: {}
