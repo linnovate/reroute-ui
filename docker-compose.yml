@@ -1,11 +1,11 @@
 version: '3'
 
 services:
-  rules-client:
-    # image: 'rules-client'
-    image: 'localhost:5000/rules-client'
-    # build:
-    #   context: .
+  rules-ui:
+    image: 'rules-ui'
+    # image: 'localhost:5000/rules-ui'
+    build:
+      context: .
     working_dir: /usr/src/app
     # Expose ports [HOST:CONTAINER}
     ports:
