@@ -25,7 +25,7 @@ class Webhook extends Component {
     return (
       <div className="webhook">
         <TextField name="url" value={this.state.url}  floatingLabelText="Url" type="text" hintText="Url" onChange={this.handleInputChange} />
-        <RadioButtonGroup name="method" defaultSelected="POST" onChange={this.handleInputChange}>
+        <RadioButtonGroup name="method" defaultSelected={this.state.method} onChange={this.handleInputChange}>
           <RadioButton
             value="POST"
             label="POST"
