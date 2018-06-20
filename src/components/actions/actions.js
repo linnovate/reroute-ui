@@ -9,6 +9,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import Webhook from './webhook/webhook';
+import Delay from './delay/delay';
 
 class Actions extends Component {
 
@@ -17,12 +18,16 @@ class Actions extends Component {
       title: 'Webhook settings',
       component: Webhook,
     },
+    delay: {
+      title: 'Delay settings',
+      component: Delay,
+    },
   }
 
   constructor() {
     super();
     this.state = {
-      actions: ['webhook', 'index', 'save to mongo'],
+      actions: ['webhook', 'index', 'save to mongo', 'delay'],
       value: '',
       openActionSettings: false,
     };
