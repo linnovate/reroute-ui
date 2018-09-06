@@ -1,0 +1,10 @@
+.right-section {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 34%;
+    height: 100%;
+    box-shadow: -5px 0px rgba(0, 0, 0, 0.04);
+    z-index: 9999;
+    background-color: white;
+}

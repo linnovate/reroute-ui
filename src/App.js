@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
-import MainRulesView from './components/main-rules/main-rules';
+import RulesList from './components/rules-list/rules-list';
+import RightSection from './components/right-section/right-section';
 
 import './App.css';
 
@@ -9,26 +10,28 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      ruleCategoryActive: 'main',
+      rightSectionComp: 'RuleEditor',
+      rightSectionData: {}
     };
 
-    this.handleSidebarItemClicked = this.handleSidebarItemClicked.bind(this);
+  }
+  loadRules = () => {
+    this.refs.rulesListReference.loadRules()
   }
 
-  handleSidebarItemClicked(ruleCategory) {
-    this.setState({ ruleCategoryActive: ruleCategory });
+  changeRightSection = (component, data) => {
+    this.setState({rightSectionComp: component, rightSectionData: data});
   }
   render() {
     return (
       <MuiThemeProvider>
         <div className="app">
           <AppBar
-            title="Rule Editor"
+            title="Recollect"
             showMenuIconButton={false}
           />
-          <div className="main-view">
-            {this.state.ruleCategoryActive === 'main' && <MainRulesView />}
-          </div>
+          <RulesList ref="rulesListReference" ruleClicked={(rule) => this.changeRightSection('RuleEditor', rule)}/>
+          <RightSection loadRules={this.loadRules} component={this.state.rightSectionComp} data={this.state.rightSectionData}/>
         </div>
       </MuiThemeProvider>
     );

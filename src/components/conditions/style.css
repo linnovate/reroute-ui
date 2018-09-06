@@ -1,0 +1,6 @@
+.conditions {
+
+}
+.conditions > .condition {
+    display: flex;
+}

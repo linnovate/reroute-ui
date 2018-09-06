@@ -1,0 +1,8 @@
+.rule-editor .field-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+.rule-editor .actions {
+    position: absolute;
+    bottom: 0;
+}
