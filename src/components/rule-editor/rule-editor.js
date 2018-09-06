@@ -3,8 +3,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios';
 import config from '../../config';
-
 import Conditions from '../conditions/conditions';
+import Actions from '../actions/actions';
 import './style.css';
 
 class RuleEditor extends React.Component {
@@ -27,7 +27,8 @@ class RuleEditor extends React.Component {
     const r = {
       title: data.title,
       description: data.description,
-      id: data._id
+      id: data._id,
+      conditions: data.ruleObj && data.ruleObj.conditions
     };
     this.setState({ruleDetails: r})
   }
@@ -96,9 +97,13 @@ class RuleEditor extends React.Component {
         </div>
         <div className="field-wrapper">
           <span>Conditions</span>
-          <Conditions ref="conditionsReference"/>
+          <Conditions conditions={this.state.ruleDetails.conditions} ref="conditionsReference"/>
         </div>
-        <div className="actions">
+        <div className="field-wrapper">
+          <span>Actions</span>
+          <Actions />
+        </div>
+        <div className="bottom">
           <RaisedButton label="Save" onClick={this.save} />
         </div>
       </div>

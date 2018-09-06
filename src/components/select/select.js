@@ -15,7 +15,7 @@ const customStyles = {
 }
 class SelectBox extends React.Component {
   state = {
-    selectedOption: null,
+    selectedOption: this.props.selectedOption,
   }
   handleChange = (selectedOption) => {
     this.setState({selectedOption});

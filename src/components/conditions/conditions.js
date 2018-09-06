@@ -39,6 +39,9 @@ class Conditions extends React.Component {
   state = {
     list: []
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({list: nextProps.conditions || []})
+  }
   getConditions = () => {
     return this.state.list;
   }
@@ -49,23 +52,19 @@ class Conditions extends React.Component {
   }
   handleFirstSelect = (selected, i) => {
     const conditions = this.state.list;
-    conditions[i].first = selected.value;
+    conditions[i].first = selected;
     conditions[i].sign = true;
     this.setState({list: conditions});
   }
   handleSecondSelect = (selected, i) => {
     const conditions = this.state.list;
-    const sec = {
-      type: selected.value === 'newValue' ? 'value' : null,
-      value: selected.value === 'newValue' ? selected.label : selected.value
-    }
-    conditions[i].second = sec;
+    conditions[i].second = selected;
     this.setState({list: conditions});
   }
   addSecondSelect = (selected, i) => {
     const conditions = this.state.list;
-    conditions[i].sign = selected.value;
-    conditions[i].second = true;
+    conditions[i].sign = selected;
+    conditions[i].second = conditions[i].second || true;
     this.setState({list: conditions});
   }
   render() {
@@ -73,9 +72,9 @@ class Conditions extends React.Component {
       <div className="conditions">
         {
           this.state.list.map((q, i) => <div className="condition" key={i}>
-            <SelectByEntity options={firstOptions} handleSelect={(selected) => this.handleFirstSelect(selected, i)} />
-            {q.sign && <SelectBox options={signOptions} handleSelect={(selected) => this.addSecondSelect(selected, i)} />}
-            {q.second && <SelectByEntity options={secondOptions} creatable handleSelect={(selected) => this.handleSecondSelect(selected, i)} />}
+            <SelectByEntity selectedOption={q.first} options={firstOptions} handleSelect={(selected) => this.handleFirstSelect(selected, i)} />
+            {q.sign && <SelectBox selectedOption={q.sign} options={signOptions} handleSelect={(selected) => this.addSecondSelect(selected, i)} />}
+            {q.second && <SelectByEntity selectedOption={q.second} options={secondOptions} creatable handleSelect={(selected) => this.handleSecondSelect(selected, i)} />}
           </div>)
         }
         <AddBtn handleClick={this.addCondition} />

@@ -54,7 +54,7 @@ const customStyles = {
 
 class SelectByEntity extends React.Component {
   state = {
-    selectedOption: null,
+    selectedOption: this.props.selectedOption,
     options: this.props.options,
     status: 1,
     menuIsOpen: false
@@ -80,6 +80,7 @@ class SelectByEntity extends React.Component {
   }
 
   render() {
+    console.log('ddd', this.state.selectedOption)
     const { selectedOption, options } = this.state;
     return (
       this.props.creatable ?
