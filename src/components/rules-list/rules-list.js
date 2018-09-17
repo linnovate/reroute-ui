@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { List, ListItem } from 'material-ui/List';
 import axios from 'axios';
 import config from '../../config';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
+// import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+// import ActionDelete from 'material-ui/svg-icons/action/delete';
 
 import './rules-list.css';
 
-const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'];
+//const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'];
 const initialValues = {
   condition: {
     key: '',
@@ -21,10 +21,10 @@ const initialValues = {
   },
 };
 
-const headerStyle = {
-  paddingLeft: 0,
-  fontSize: '16px',
-};
+// const headerStyle = {
+//   paddingLeft: 0,
+//   fontSize: '16px',
+// };
 
 class RulesList extends Component {
   constructor() {
@@ -76,7 +76,7 @@ class RulesList extends Component {
             className="listItem"
             primaryText={rule.title}
             secondaryText={rule.description}
-            onClick={(e) => this.props.ruleClicked(rule)}
+            onClick={(e) => this.props.ruleClicked(Object.assign(rule, {type: 'rule'}))}
           />),
           )}
         </List>
@@ -91,8 +91,6 @@ RulesList.defaultProps = {
 
 RulesList.propTypes = {
   rules: PropTypes.array,
-  editRule: PropTypes.func.isRequired,
-  deleteRule: PropTypes.func.isRequired,
 };
 
 export default RulesList;

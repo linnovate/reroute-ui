@@ -4,25 +4,25 @@ import Creatable from 'react-select/lib/Creatable';
 import arrow from './arrow.svg';
 import arrowNext from './arrow-next.svg';
 
-const options = [
-  { value: 'reservation', label: 'Reservation', arrowNext: true, optionsArray: [
-    { value: 'r', label: 'Reservation', arrowBack: true },
-    { value: 'qqq', label: 'qqqqqqq' },
-    { value: 'ffffffff', label: 'ffffffffff' },    
-  ] },
-  { value: 'link', label: 'Link', arrowNext: true, optionsArray: [
-    { value: 'l', label: 'Link', arrowBack: true },
-    { value: 'dr', label: 'dr' },
-    { value: 'eee', label: 'eee' },      
-  ] },
-];
+// const options = [
+//   { value: 'reservation', label: 'Reservation', arrowNext: true, optionsArray: [
+//     { value: 'r', label: 'Reservation', arrowBack: true },
+//     { value: 'qqq', label: 'qqqqqqq' },
+//     { value: 'ffffffff', label: 'ffffffffff' },    
+//   ] },
+//   { value: 'link', label: 'Link', arrowNext: true, optionsArray: [
+//     { value: 'l', label: 'Link', arrowBack: true },
+//     { value: 'dr', label: 'dr' },
+//     { value: 'eee', label: 'eee' },      
+//   ] },
+// ];
 
 
-const valueOption = {
-  value: 'value',
-  label: 'Value',
-  arrowNext: true
-}
+// const valueOption = {
+//   value: 'value',
+//   label: 'Value',
+//   arrowNext: true
+// }
 
 const customStyles = {
   valueContainer: (base, state) => {
@@ -80,7 +80,6 @@ class SelectByEntity extends React.Component {
   }
 
   render() {
-    console.log('ddd', this.state.selectedOption)
     const { selectedOption, options } = this.state;
     return (
       this.props.creatable ?

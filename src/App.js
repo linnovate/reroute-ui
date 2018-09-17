@@ -11,7 +11,8 @@ class App extends Component {
     super();
     this.state = {
       rightSectionComp: 'RuleEditor',
-      rightSectionData: {}
+      rightSectionData: null,
+      currentRule: null
     };
 
   }
@@ -20,7 +21,30 @@ class App extends Component {
   }
 
   changeRightSection = (component, data) => {
-    this.setState({rightSectionComp: component, rightSectionData: data});
+    switch (data && data.type) {
+      case 'rule': {
+        this.setState({currentRule: data, rightSectionComp: 'RuleEditor', rightSectionData: data});
+        break;
+      }
+      case 'newActionSaved': {
+        const t = this.state.currentRule;
+        t.actions = t.actions || [];
+        t.actions.push(data.action);
+        this.setState({currentRule: t, rightSectionComp: 'RuleEditor', rightSectionData: t})
+        break;
+      }
+      case 'editPushNotification': {
+        this.setState({rightSectionComp: 'PushNotification', rightSectionData: data})
+        break;       
+      }
+      default: break;
+    }
+    // if (data && data.type === 'rule') {
+    //   this.setState({currentRule: data})
+    // } else if (data && data.type === 'actionSaved') {
+    //   data = Object.assign(data, this.state.currentRule)
+    // }
+    // this.setState({rightSectionComp: component, rightSectionData: data});
   }
   render() {
     return (
@@ -31,7 +55,7 @@ class App extends Component {
             showMenuIconButton={false}
           />
           <RulesList ref="rulesListReference" ruleClicked={(rule) => this.changeRightSection('RuleEditor', rule)}/>
-          <RightSection loadRules={this.loadRules} component={this.state.rightSectionComp} data={this.state.rightSectionData}/>
+          <RightSection loadComponent={this.changeRightSection} loadRules={this.loadRules} component={this.state.rightSectionComp} data={this.state.rightSectionData}/>
         </div>
       </MuiThemeProvider>
     );

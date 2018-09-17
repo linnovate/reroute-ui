@@ -18,7 +18,8 @@ class RuleEditor extends React.Component {
     }
   }
   componentDidMount() {
-    this.initRule(this.props.data)
+    if (this.props.data)
+        this.initRule(this.props.data)
   }
   componentWillReceiveProps(nextProps) {
     this.initRule(nextProps.data)
@@ -28,7 +29,8 @@ class RuleEditor extends React.Component {
       title: data.title,
       description: data.description,
       id: data._id,
-      conditions: data.ruleObj && data.ruleObj.conditions
+      conditions: data.ruleObj && data.ruleObj.conditions,
+      actions: data.actions || data.ruleObj && data.ruleObj.actions
     };
     this.setState({ruleDetails: r})
   }
@@ -50,7 +52,7 @@ class RuleEditor extends React.Component {
         description: this.state.ruleDetails.description,
         ruleObj: {
           conditions,
-          actions: ['sevvvv', 'kkl']
+          actions: this.state.ruleDetails.actions
         }
       })
       .then((response) => {
@@ -101,7 +103,7 @@ class RuleEditor extends React.Component {
         </div>
         <div className="field-wrapper">
           <span>Actions</span>
-          <Actions />
+          <Actions actions={this.state.ruleDetails.actions} loadComponent={this.props.loadComponent}/>
         </div>
         <div className="bottom">
           <RaisedButton label="Save" onClick={this.save} />
