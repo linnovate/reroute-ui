@@ -2,6 +2,7 @@ import React from 'react';
 import MenuItem from 'material-ui/MenuItem';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
+import _ from 'lodash';
 import AddBtn from '../add-btn/add-btn';
 import './style.css'
 
@@ -15,7 +16,13 @@ class Actions extends React.Component {
   }
   state = {
     anchorEl: null,
+    list: this.props.actionsOptions,
+    actions: []
   };
+
+  componentWillReceiveProps(nextprops) {
+    this.setState({list: nextprops.actionsOptions || []})
+  }
 
   handleRequestClose = () => {
     this.setState({
@@ -24,11 +31,34 @@ class Actions extends React.Component {
   };
 
   handleChange = (event, index, value) => this.setState({value});
+  addOption = (entity) => {
+    const a = this.state.actions;
+    let found = a.find((element) => {
+      return element.entity === entity;
+    });
+    if (found) return;
+    found = this.state.list.find((element) => {
+      return element.entity === entity;
+    });
+    found.actions.forEach(q => {
+      a.push({entity: found.entity, type: q.type, description: q.description})
+    })
+    this.setState({actions: a})
+  }
+  renderItem = (action) => {
+    switch (action.type) {
+      case 'pushNotification' : {
+        return  <MenuItem primaryText={action.description} onClick={() => this.props.loadComponent('PushNotification', {type: 'editPushNotification'})}/>
+      }
+      default: {
+         return  <MenuItem primaryText={action.description} />       
+      }
+    }
+  }
   render() {
-    console.log(this.props.actions)
     return (
       <div className={`actions ${this.state.showList ? 'showList' : ''}`}>
-      {this.props.actions && this.props.actions.map((item) => <div>{item.type}</div>)}
+      {this.props.actions && this.props.actions.map((item, index) => <div key={index}>{item.type}</div>)}
         <AddBtn handleClick={this.showList}/>
         <Popover
           open={this.state.open}
@@ -37,11 +67,11 @@ class Actions extends React.Component {
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           onRequestClose={this.handleRequestClose}
         >
-          <Menu>
-            <MenuItem primaryText="Send push notification" onClick={() => this.props.loadComponent('PushNotification', {type: 'editPushNotification'})}/>
-            <MenuItem primaryText="Update guest health" />
-            <MenuItem primaryText="Add tag to guest" />
-          </Menu>
+          {this.state.actions && <Menu>
+            {this.state.actions.map(q => 
+              this.renderItem(q)
+            )}
+          </Menu>}
         </Popover>
       </div>
     )

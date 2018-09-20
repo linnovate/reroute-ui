@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RulesList from './components/rules-list/rules-list';
 import RightSection from './components/right-section/right-section';
+import logo from './logo.svg';
+import logoInner from './logo-inner.svg';
 
 import './App.css';
+
+const muiTheme = getMuiTheme({
+  fontFamily: 'Lato-Medium',
+  appBar: {
+    height: 78,
+    color: '#2B405E',
+    padding: 36
+  },
+});
 
 class App extends Component {
   constructor() {
@@ -28,8 +40,9 @@ class App extends Component {
       }
       case 'newActionSaved': {
         const t = this.state.currentRule;
-        t.actions = t.actions || [];
-        t.actions.push(data.action);
+        t.ruleObj = t.ruleObj || {};
+        t.ruleObj.actions = t.ruleObj.actions || [];
+        t.ruleObj.actions.push(data.action);
         this.setState({currentRule: t, rightSectionComp: 'RuleEditor', rightSectionData: t})
         break;
       }
@@ -48,12 +61,18 @@ class App extends Component {
   }
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider muiTheme={muiTheme}>
         <div className="app">
           <AppBar
-            title="Recollect"
-            showMenuIconButton={false}
-          />
+            className="app-bar"
+            title={<div className="title">
+                    <div className="logo" style={{backgroundImage: `url(${logo})`}}>
+                      <div className="logo-inner" style={{backgroundImage: `url(${logoInner})`}}></div>
+                    </div>
+                    <div className="recollect"><span>re</span><span>colllect</span></div></div>}
+            showMenuIconButton={false}>
+
+          </AppBar>
           <RulesList ref="rulesListReference" ruleClicked={(rule) => this.changeRightSection('RuleEditor', rule)}/>
           <RightSection loadComponent={this.changeRightSection} loadRules={this.loadRules} component={this.state.rightSectionComp} data={this.state.rightSectionData}/>
         </div>

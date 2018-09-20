@@ -8,8 +8,7 @@ export default class PushNotification extends React.Component {
 
   }
   save = () => {
-    this.props.loadComponent('RuleEditor', {type: 'newActionSaved', action: {type: 'push notification',message: this.state.message}})
-    
+    this.props.loadComponent('RuleEditor', {type: 'newActionSaved', action: {type: 'push notification',message: this.state.message}})   
   }
   changeMessage = (e, val) => {
     this.setState({ message: val })

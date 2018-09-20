@@ -1,7 +1,9 @@
 import React from 'react';
 import Select from 'react-select';
+import './style.css';
 
 const customStyles = {
+  control: styles => ({ ...styles, backgroundColor: 'white', border: '1px solid #EDEDED', borderRadius: 'none' }),
   valueContainer: (base, state) => {
     const width = '120px';
     return {...base, width}
@@ -25,6 +27,7 @@ class SelectBox extends React.Component {
     const { selectedOption } = this.state;
     return (
       <Select
+        className="select-box"
         value={selectedOption}
         onChange={this.handleChange}
         options={this.props.options}

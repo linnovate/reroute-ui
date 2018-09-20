@@ -30,7 +30,8 @@ class RulesList extends Component {
   constructor() {
     super();
     this.state = {
-      rulesList: []
+      rulesList: [],
+      activeRule: {}
     };
   }
 
@@ -64,19 +65,23 @@ class RulesList extends Component {
       actions: [JSON.parse(JSON.stringify(initialValues.action))],
     };
   }
+  ruleClicked = (rule) => {
+    this.setState({activeRule: rule})
+    this.props.ruleClicked(Object.assign(rule, {type: 'rule'}))
+  }
 
   render() {
     return (
       <div className="rules-list">
         <div className="header">Rules</div>
-        <List>
+        <List className="list">
           {this.state.rulesList.map((rule, index) =>
           (<ListItem
             key={index}
-            className="listItem"
+            className={`listItem ${this.state.activeRule._id === rule._id ? 'active': ''}`}
             primaryText={rule.title}
             secondaryText={rule.description}
-            onClick={(e) => this.props.ruleClicked(Object.assign(rule, {type: 'rule'}))}
+            onClick={(e) => this.ruleClicked(rule)}
           />),
           )}
         </List>

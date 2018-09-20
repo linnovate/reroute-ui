@@ -1,8 +1,28 @@
-.rule-editor .field-wrapper {
+.rule-editor {
     display: flex;
     flex-direction: column;
+    height: 100%;
+}
+.rule-editor .field-wrapper {
+    /*display: flex;
+    flex-direction: column;*/
+    margin-bottom: 38px;
 }
 .rule-editor .bottom {
-    position: absolute;
-    bottom: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+}
+.field-wrapper > span:first-child {
+    color: #8F8F8F;
+    font-size: 13px;
+    font-family: 'Lato-Bold';
+}
+.rule-editor .field-wrapper .title {
+    font-size: 30px !important;
+    color: #2E2E2E;
+}
+.rule-editor .field-wrapper .description {
+    font-size: 14px !important;
+    color: #2E2E2E;
 }
