@@ -1,12 +1,19 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+// import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import App from './App';
+// import App from './App';
+import DashBoard from './DashBoard';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-injectTapEventPlugin();
+<Router>
+    <Route exact path="/" component={DashBoard} />
+    <Route path="/" component={DashBoard} />
+  </Router>
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// injectTapEventPlugin();
+
+ReactDOM.render(<DashBoard />, document.getElementById('root'));
 registerServiceWorker();
