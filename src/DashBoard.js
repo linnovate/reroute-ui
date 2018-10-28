@@ -1,35 +1,38 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
 
+
+import GuestHealth from './DashBoardComponents/GuestHealth';
+import AssignmentList from './DashBoardComponents/AssignmentList';
 import Filters from './DashBoardComponents/Filters';
 
 import './DashBoard.css';
 
-const muiTheme = {
-'fontFamily': 'Lato-Medium',
-  'appBar': {
-    height: 78,
-    color: '#2B405E',
-    padding: 36
-  },
-  palette: {
-    type: 'light'
-  },
-  shape: {
-    borderRadius: '30px'
-  }
-}
+
+const theme = createMuiTheme({
+  // palette: {
+  //   primary: '#337ab7',
+  //   secondary: {
+  //     main: '#f44336',
+  //   },
+  //   typography: {
+  //     useNextVariants: true,
+  //   },
+  // },
+});
+
 
 function DashBoard() {
   return (
-    <MuiThemeProvider >
+    <MuiThemeProvider theme={theme}>
       <div className="side-bar">
         <div className="logo">Guest Monitoring</div>
         <Filters></Filters>
-        <div className="section">
-          
-        </div>
+      </div>
+      <div className="section">
+          <GuestHealth></GuestHealth>
+          <AssignmentList></AssignmentList>
       </div>
     </MuiThemeProvider>
   );

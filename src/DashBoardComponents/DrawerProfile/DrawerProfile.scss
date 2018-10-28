@@ -1,0 +1,91 @@
+.MuiDrawer-paperAnchorRight-142 {
+  width: 30%;
+}
+.profile {
+  .close {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 0;
+  }
+  .details {
+    padding: 70px 0 35px 7vw;
+    display: flex;
+    .avatar {
+      width: 90px;
+      height: 90px;
+      margin-right: 1.5vw;
+    }
+    .name {
+      font-size: 1.3vw;
+      font-weight: 600;
+    }
+    .index {
+      font-size: 0.9vw;
+      font-weight: 100;
+    }
+  }
+  .roomDetails {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px 1vw 3em 1vw;
+    padding: 0;
+    
+    .detail {
+      margin: 14px 1.5vw 14px 3vw;
+      .icon {
+        color: #BDBDBD;
+        text-transform: uppercase;
+        padding-left: 1.3vw;
+        margin-bottom: 4px;
+      }
+      .one ,.two ,.three ,.four{
+        background-image: url(/static/media/checkIn.90c55fdf.svg);
+        background-repeat: no-repeat;
+        background-position-y: center;
+      }
+      .two {
+
+      }
+      span {
+        color: #4F4F4F;
+        font-size: 1.1vw;
+      }
+    }
+  }
+  .tabs {
+    background-image: linear-gradient(rgba(196, 196, 196, 0.28) 0%, rgba(196, 196, 196, 0) 100%);  
+    margin: 20px 0;
+    .TabIndicator-colorSecondary-228 {
+      background: #2F80ED;
+    }
+    .tab {
+      padding: 1.3vw;
+      font-size: 0.9vw;
+      font-weight: 600;
+    }
+  }
+  .list {
+    div {
+      margin: 0.5vw;
+      padding: 1vw;
+    }
+    .green {
+      color: #219653;
+      background: rgba(153, 233, 166, 0.11);
+      border: 1px solid #219653;
+    }
+    .red {
+      color: #EB5757;
+      background: rgba(255, 195, 195, 0.11);
+      border: 1px solid #EB5757;
+    }
+    .gray {
+      color: #A5A1A1;
+      background: #F8F8F8;
+      border: 1px solid #A5A1A1;
+    }
+  }
+}

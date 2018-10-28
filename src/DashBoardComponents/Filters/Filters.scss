@@ -1,0 +1,46 @@
+.date-range {
+  height: 100%;
+  padding: 6px;
+  font-size: 15px;
+  margin: 0 2vw 40px;
+  background: #3075D1;
+  border: 1px solid #8DBEFF;
+}
+.MuiInputBase-root-21 {
+  width: 9vw;
+  padding-left: 0.5vw;
+  color: white !important;
+  &:before {
+      border: none !important;
+  }
+  &:after {
+    border: none !important;
+  }
+}
+.rangeTxt {
+  display: inline-block;
+  height: 100%;
+  color: #8DBEFF;
+  padding-left: 0.1vw;
+  font-size: 0.8vw;
+}
+.MuiSelect-icon-7 {
+  color: white !important;
+}
+.filter {
+  direction: ltr;
+  margin: 0 2vw 40px;
+}
+.filter .MuiRadio-colorPrimary-64.MuiRadio-checked-62 {
+    color: white;
+}
+.filter .MuiRadio-root-61 {
+    color: #3075D1;
+}
+/* .filter .MuiRadio-checked-62 {
+    columns: white;
+} */
+.filter .MuiTypography-body1-88 {
+    color: white;
+    font-size: 1.1vw;
+}

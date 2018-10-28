@@ -1,9 +1,6 @@
 #root {
     display: flex;
     min-height: 100vh;
-    direction: rtl;
-    flex-direction: column;
-    align-items: flex-end;
     color: white;
 }
 .side-bar {
@@ -19,7 +16,11 @@
     color: white;
     height: 30px;
     padding: 40px 7%;
-    font-size: 2vw;
+    font-size: 1.9vw;
+    font-weight: 600;
     text-align: center;
     margin: 0 auto;
+}
+.section {
+    width: 80%;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 // import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -8,7 +8,7 @@ import DashBoard from './DashBoard';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
-<Router>
+  <Router>
     <Route exact path="/" component={DashBoard} />
     <Route path="/" component={DashBoard} />
   </Router>
