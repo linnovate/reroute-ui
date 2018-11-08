@@ -37,7 +37,7 @@ const talkToApi = function (options, callback) {
 }
 
 
-app.route('/api/rules/:id?')
+app.route('/api/rules')
   .all(function (req, res) {
     const options = {
       cmd_api: req.originalUrl,

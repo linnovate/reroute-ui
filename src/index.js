@@ -9,8 +9,8 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 
   <Router>
-    <Route exact path="/" component={DashBoard} />
-    <Route path="/" component={DashBoard} />
+    <Route exact path="/dashboard" component={DashBoard} />
+    <Route path="/dashboard" component={DashBoard} />
   </Router>
 
 // injectTapEventPlugin();

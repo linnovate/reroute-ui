@@ -46,11 +46,18 @@
       border-right: 1px solid #E0E0E0;
       padding: 0 0.8vw 0 1.8vw;
       .chip {
-        width: 9vw;
+        width: 11vw;
         margin: 6px;
-        padding: 1px 17px;
-        font-size: 0.9vw;
+        padding: 1px 0.3vw;
+        font-size: 1vw;
         background: rgba(235, 87, 87, 0.05);
+        span::first-letter {
+          text-transform: uppercase;
+        }
+        span {
+          color: #EB5757;
+          width: 100%;
+        }
         img {
           margin: -4px 4px 0 -8px !important;
         }

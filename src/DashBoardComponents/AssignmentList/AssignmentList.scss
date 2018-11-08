@@ -1,10 +1,96 @@
 .assignment-list {
-    margin: 1.1vw;
-    min-height: 522px;
-    border-radius: 14px;
-    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
-    .title {
-        color: #4F4F4F;
-        padding: 1.3vw;
+  margin: 1.1vw;
+  min-height: 522px;
+  border-radius: 14px;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  .title {
+    color: #4F4F4F;
+    padding: 1.3vw;
+  }
+  table {
+    margin-left: 1vw;
+    thead {
+      tr th{
+        // text-align: center;
+        color: rgba(0, 0, 0, 0.87);
+        font-weight: 600;
+        font-size: 0.8vw;
+        border-bottom: 0 solid;
+      }
+      tr th:not(:last-child) {
+        border-right: 1px solid #E0E0E0;
+      }
+      tr th:first-child {
+        border-right: 0 solid #E0E0E0;
+      }
     }
+    tbody {
+      td .white:nth-child(2) {
+        position: absolute;
+        height: 6px;
+        background: white;
+        right: 0;
+        left: 0;
+        bottom: 0;
+      }
+      tr {
+        height: 60px;
+        &:nth-child(odd) {
+          background: rgba(242, 242, 242, 0.5);   
+        }
+      }
+      td {
+        padding: 1px 56px 4px 24px;
+        position: relative;
+        color: rgba(0, 0, 0, 0.87);
+        font-size: 1vw;
+        border-bottom: 0px solid !important;
+        &:not(:last-child) {
+          border-right: 1px solid #E0E0E0;
+        }
+        &:first-child {
+          border-right: 0 solid #E0E0E0;
+        }
+      }
+      .health {
+        background: #EB5757;
+        color: white;
+        font-weight: 600;
+        font-size: 1.3vw;
+        padding: 1px 3px 4px 3px;
+      }
+      .id {
+        color: #00AEEF;
+      }
+      .status {
+        display: flex;
+        .circle {
+          background: #E0E0E0;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          margin-right: 3px;
+          position: relative; 
+          &:not(:last-child)::after {
+            position: absolute;
+            content: '-';
+            right: -4px;
+            color: #E0E0E0;
+          }
+        }
+      }
+    }
+    .health {
+      width: 0.3vw;
+      text-align: center;
+    }
+    .name {
+      width: 11vw;
+      padding-right: 10px;
+      text-align: left;
+    }
+    .id {
+      width: 7vw;
+    }
+  }
 }

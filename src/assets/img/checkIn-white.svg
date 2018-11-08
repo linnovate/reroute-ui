@@ -1,0 +1,17 @@
+<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.5 9.5H6.5V12.5H8.5V9.5Z" stroke="#BDBDBD" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M6 7V8H7V7H6Z" fill="#BDBDBD"/>
+<path d="M8 7V8H9V7H8Z" fill="#BDBDBD"/>
+<path d="M6 5V6H7V5H6Z" fill="#BDBDBD"/>
+<path d="M4 5V6H5V5H4Z" fill="#BDBDBD"/>
+<path d="M10 7V8H11V7H10Z" fill="#BDBDBD"/>
+<path d="M10 5V6H11V5H10Z" fill="#BDBDBD"/>
+<path d="M10 9V10H11V9H10Z" fill="#BDBDBD"/>
+<path d="M8 5V6H9V5H8Z" fill="#BDBDBD"/>
+<path d="M2.5 12V12.5H12.5V3.5H2.5V5" stroke="#BDBDBD" stroke-miterlimit="10" stroke-linejoin="round"/>
+<path d="M3 8H0V9H3V8Z" fill="#BDBDBD"/>
+<path d="M2 11L5 8.5L2 6V11Z" fill="#BDBDBD"/>
+<path d="M5 1L4.5 0L4 1L3 1.5L4 2L4.5 3L5 2L6 1.5L5 1Z" fill="#BDBDBD"/>
+<path d="M8 1L7.5 0L7 1L6 1.5L7 2L7.5 3L8 2L9 1.5L8 1Z" fill="#BDBDBD"/>
+<path d="M11 1L10.5 0L10 1L9 1.5L10 2L10.5 3L11 2L12 1.5L11 1Z" fill="#BDBDBD"/>
+</svg>

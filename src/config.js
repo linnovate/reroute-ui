@@ -1,5 +1,5 @@
 const config = {
-  ruleServer: 'http://localhost:4043/',
+  ruleServer: 'http://localhost:6001/',
   graphql: 'http://localhost:8080/graphql',
 };
 

@@ -28,7 +28,7 @@ class Filters extends React.Component {
     return (
       <div className="filters">
           <div className="date-range">
-            <div className="rangeTxt">DARE RANGE</div>
+            <div className="rangeTxt">DATE RANGE</div>
             <Select
               value={this.state.time}
               onChange={this.handleSelectChange}>

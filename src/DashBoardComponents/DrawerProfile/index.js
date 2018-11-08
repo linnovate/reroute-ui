@@ -26,6 +26,20 @@ class DrawerProfile extends React.Component {
     this.setState({ value });
   };
 
+  formatPeople(adults, children, infants) {
+    let people = [];
+    if (adults && parseInt(adults, 10) > 0) {
+        people.push(parseInt(adults, 10) + ' ' + (parseInt(adults, 10) > 1 ?  'adults' : 'adult'));
+    }
+    if (children && parseInt(children, 10) > 0) {
+        people.push(parseInt(children, 10) + ' ' + (parseInt(children, 10) > 1 ? 'children' : 'child'));
+    }
+    if (infants && parseInt(infants, 10) > 0) {
+        people.push(parseInt(infants, 10) + ' ' + (parseInt(infants, 10) > 1 ? 'infants' : 'infant'));
+    }
+    return people.join(' + ');
+  }
+
   render() {
     return (
       <div className="profile">
@@ -37,27 +51,27 @@ class DrawerProfile extends React.Component {
           className="avatar"
         />
         <div>
-          <div className="name">Mr. Howard Romero</div>
-          <div className="index">48015134155</div>
+          <div className="name">{`Mr. ${this.props.data.guest.firstName} ${this.props.data.guest.lastName}`}</div>
+          <div className="index">{this.props.data.masterID}</div>
         </div>
        </div>
        <div className="roomDetails">
          <div className="detail">
            <div className="icon one">check-in</div>
-           <span>May 1st 2018</span>
+           <span>{this.props.data.bookingFrom}</span>
          </div>
          <div className="detail">
            <div className="icon two">check-out</div>
-           <span>Standard  201</span>
+           <span>{this.props.data.bookingTo}</span>
          </div>
          <div className="detail">
            <div className="icon three">room</div>
-           <span>May 4th 2018</span>
+           <span>{`${this.props.data.roomType} ${this.props.data.roomNumber}`}</span>
          </div>
          <div className="detail">
            <div className="icon four">guests</div>
-           <span>2 Adults   3 Children</span>
-         </div>
+           <span>{this.formatPeople(this.props.data.adultCount, this.props.data.childCount, this.props.data.infantCount)}</span>      
+          </div>
        </div>
        <Tabs
             className="tabs"

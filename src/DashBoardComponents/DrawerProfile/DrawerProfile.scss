@@ -1,5 +1,7 @@
-.MuiDrawer-paperAnchorRight-142 {
-  width: 30%;
+.drawer {
+  > div:nth-child(2) {
+    width: 33%;
+  }
 }
 .profile {
   .close {
@@ -30,24 +32,33 @@
   .roomDetails {
     display: flex;
     flex-wrap: wrap;
-    margin: 0px 1vw 3em 1vw;
+    margin: 0px 1vw 3em 2vw;
     padding: 0;
     
     .detail {
-      margin: 14px 1.5vw 14px 3vw;
+      margin: 14px 2vw 14px 2vw;
+      width: 10vw;
       .icon {
         color: #BDBDBD;
         text-transform: uppercase;
         padding-left: 1.3vw;
         margin-bottom: 4px;
       }
-      .one ,.two ,.three ,.four{
-        background-image: url(/static/media/checkIn.90c55fdf.svg);
-        background-repeat: no-repeat;
-        background-position-y: center;
+      .one {
+        background-image: url('../../assets/img/checkIn-white.svg');
       }
       .two {
-
+        background-image: url('../../assets/img/checkOut-white.svg');
+      }
+      .three {
+        background-image: url('../../assets/img/room.svg');
+      }
+      .four {
+        background-image: url('../../assets/img/guest.svg');
+      }
+      .one ,.two ,.three ,.four{
+        background-repeat: no-repeat;
+        background-position-y: center;
       }
       span {
         color: #4F4F4F;
@@ -58,8 +69,9 @@
   .tabs {
     background-image: linear-gradient(rgba(196, 196, 196, 0.28) 0%, rgba(196, 196, 196, 0) 100%);  
     margin: 20px 0;
-    .TabIndicator-colorSecondary-228 {
+    span[class^="TabIndicator-colorSecondary-"] {
       background: #2F80ED;
+      height: 20px;
     }
     .tab {
       padding: 1.3vw;

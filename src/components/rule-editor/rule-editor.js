@@ -82,7 +82,7 @@ class RuleEditor extends React.Component {
     const conditions = this.refs.conditionsReference.getConditions()
     // const ruleStr = this.state.currentRuleStr;
     // if (this.state.currentRule._id) {
-      axios.put(`${config.ruleServer}api/rules/${this.state.ruleDetails.id}`, { 
+      axios.put(`${config.ruleServer}`, { 
         title:  this.state.ruleDetails.title,
         description: this.state.ruleDetails.description,
         ruleObj: {

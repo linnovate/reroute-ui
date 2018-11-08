@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 // import AppBar from 'material-ui/AppBar';
 // import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RulesList from './components/rules-list/rules-list';
@@ -61,7 +61,7 @@ class App extends Component {
   }
   render() {
     return (
-      // <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider>
         <div className="app">
           {/* <AppBar
             className="app-bar"
