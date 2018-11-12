@@ -3,6 +3,23 @@
   min-height: 522px;
   border-radius: 14px 0 0 14px;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  .chip {
+    width: 11vw;
+    margin: 6px;
+    padding: 1px 0.3vw;
+    font-size: 1vw;
+    background: rgba(235, 87, 87, 0.05);
+    span::first-letter {
+      text-transform: uppercase;
+    }
+    span {
+      color: #EB5757;
+      width: 100%;
+    }
+    img {
+      margin: -4px 4px 0 -8px !important;
+    }
+  }
   ::-webkit-scrollbar {
     width: 10px;
     border-radius: 30px;
@@ -29,55 +46,52 @@
     color: #4F4F4F;
     padding: 1.3vw;
   }
-  .by-days {
+  .main-wrapper {
     display: flex;
     overflow-y: overlay;
-    padding-bottom: 35px;
-    .wrapper-tags {
+    padding-bottom: 38px;
+    margin: 0 0.9vw;
+    .wrapper-flex-colomn {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      margin: 3px 0;
-      flex-wrap: wrap;
-      height: 500px;
-      width: 35vw;
-      flex: 0 0 auto;
-      border-bottom: 1px solid #E0E0E0;
-      border-right: 1px solid #E0E0E0;
-      padding: 0 0.8vw 0 1.8vw;
-      .chip {
-        width: 11vw;
-        margin: 6px;
-        padding: 1px 0.3vw;
-        font-size: 1vw;
-        background: rgba(235, 87, 87, 0.05);
-        span::first-letter {
-          text-transform: uppercase;
+      .wrapper-tags {
+        flex-direction: row;
+        writing-mode: vertical-lr;
+        position: relative;
+        display: flex;
+        margin: 3px 0;
+        flex-wrap: wrap;
+        height: 500px;
+        flex: 0 0 auto;
+        padding: 0 0.8vw;
+        > div {
+          writing-mode: initial;
         }
-        span {
-          color: #EB5757;
-          width: 100%;
-        }
-        img {
-          margin: -4px 4px 0 -8px !important;
-        }
+        
+        
       }
       .tag {
         position: absolute;
-        bottom: -30px;
+        bottom: -25px;
         right: 0;
         left: 0;
-        width: 20%;
+        width: 35%;
         margin: 0 auto;
         color: #828282;
         text-transform: uppercase;
         font-size: 0.7vw;
+        text-align: center;
       }
       .char {
-        bottom: -14px !important;
-        left: 10% !important;
+        bottom: -7px !important;
         color: #E0E0E0 !important;
       }
+    }
+   
+  }
+  .by-days {
+    .wrapper-tags {
+      border-bottom: 1px solid #E0E0E0;
+      border-right: 1px solid #E0E0E0;
     }
   }
   

@@ -1,7 +1,6 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Drawer from '@material-ui/core/Drawer';
-import axios from 'axios';
 import moment from 'moment';
 
 import DrawerProfile from './../DrawerProfile';
@@ -17,17 +16,15 @@ class GuestHealth extends React.Component {
         openDrawer: false,
         data: [],
         currentGuest:'',
-        byDate: {}
+        byDate: {},
+        filterData: []
       };
-      this.loadGuests = this.loadGuests.bind(this);
-      this.loadGuests();
       this.handleChipClick = this.handleChipClick.bind(this);
       this.closeDrawer = this.closeDrawer.bind(this);
-      this.currentDate;
+      this.currentDate = '';
   }
 
   handleChipClick(index){
-    console.log('index',index)
     this.currentGuest = index;
     this.currentGuest.bookingFrom = moment(this.currentGuest.bookingFrom).format('MMMM Do YYYY');
     this.currentGuest.bookingTo = moment(this.currentGuest.bookingTo).format('MMMM Do YYYY');
@@ -35,84 +32,109 @@ class GuestHealth extends React.Component {
     this.setState({'openDrawer': true});
   }
 
+  buildDataByDate(data){
+    let byDate = {};
+    data.forEach(function(d){
+      var date1 = new Date(d.bookingFrom);
+      var date2 = new Date(d.bookingTo);
+      date1.setHours(0,0,0,0);
+      date2.setHours(24,0,0,0);
+      var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      if (new Date(d.bookingFrom).toDateString().replace(/ /g,"-") in byDate) {
+        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
+      }
+      else {
+        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")] = [];
+        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
+      }
+      for(let i = 1;i < diffDays; i++) {
+        //push to byDays array all the days the guest appear
+        let newTmp = new Date(d.bookingFrom).setDate(new Date(d.bookingFrom).getDate() +i);
+        if (new Date(newTmp).toDateString().replace(/ /g,"-") in byDate) {
+          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")].push(d);
+        }
+        else {
+          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")] = [];
+          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")].push(d);
+        }
+      }
+    })
+    this.setState({'byDate': byDate});
+    console.log('byDate array',byDate)
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.currentDate = nextProps.date;
+     if (this.props.data !== nextProps.data){
+      this.buildDataByDate(nextProps.data)
+    }
+  }
+
   closeDrawer(){
     this.setState({'openDrawer': false});
   }
 
-  loadGuests = () => {
-     const query = `{
-      shob(uid:"1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: 7) {
-        data {
-          hotelID
-          masterID
-          roomType
-          roomNumber
-          adultCount
-          childCount
-          infantCount
-          bookingFrom
-          bookingTo
-          state
-          guest{
-            firstName
-            lastName
-          }
-        } 
-      date
-       }
-     }`;
-     axios({
-      method: 'post' ,
-      url: 'http://localhost:3007/graphql?query='+ query,
-    }).then(res => {
-      this.setState({'data': res.data.data.shob.data});
-      this.currentDate = res.data.data.shob.date;
-      console.log('length data: ',res.data.data.shob.data.length)
-      let byDate = {};
-      res.data.data.shob.data.forEach(function(d){
-        if (new Date(d.bookingFrom).toDateString().replace(/ /g,"-") in byDate) {
-          byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
-        }
-        else {
-          byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")] = [];
-          byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
-        }
-      })
-      this.setState({'byDate': byDate});
-      console.log('byDate array',byDate)
-    })
-      .catch(function (error) {
-          console.log(error);
-      });
-    }
+  componentWillMount(){
+    if (this.props.data)
+      this.buildDataByDate(this.props.data)
+    this.currentDate = this.props.date;
+  }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return true;
+  }
 
-   
-  render() {   
-      return (
+  render() { 
+    return (
       <div className="guest-health">
         <div className="title">GUEST HEALTH</div>
-             <div className="by-days">
+            {this.props.status === 'All' ?
+             <div className="main-wrapper by-days">
              { Object.keys(this.state.byDate).map(key =>  
-              <div className="wrapper-tags">
-              {this.state.byDate[key].map((index,  key) =>
-              <div>
-                <Chip
-                  label={`${index['guest'].firstName} ${index['guest'].lastName}`}
-                  key={key}
-                  onClick={() => this.handleChipClick(index)}
-                  onDelete={this.handleChipClick}
-                  className="chip"
-                  deleteIcon={<img alt="" src={checkIn} />}
-                />
-                <div className="tag char">|</div>
-                <div className="tag">{`${new Date(index.bookingFrom).getDate()}/${new Date(index.bookingFrom).getMonth()+1} `}
-                {`${new Date(index.bookingFrom).toDateString() == new Date(this.currentDate).toDateString() ? `TODAY`: ``}`}</div>
+             <div className="wrapper-flex-colomn">
+                <div className="wrapper-tags">
+                {this.state.byDate[key].map((index,  key2) =>
+                <div>
+                  <Chip
+                    label={`${index['guest'].firstName} ${index['guest'].lastName}`}
+                    key={key}
+                    onClick={() => this.handleChipClick(index)}
+                    onDelete={this.handleChipClick}
+                    className="chip"
+                    deleteIcon={<img alt="" src={checkIn} />}
+                  />
+                </div>
+                )}   
               </div>
-              )}   
-              </div>
+              <div className="tag char">|</div>
+              <div className="tag">{`${new Date(key).getDate()}/${new Date(key).getMonth()+1} `}
+              {`${new Date(key).toDateString() === new Date(this.currentDate).toDateString() ? `TODAY`: ``}`}</div> 
+             </div>
+            
             )}
           </div>
+          :  
+          <div className="main-wrapper">
+          <div className="wrapper-flex-colomn">
+             <div className="wrapper-tags">
+             {this.props.data.map((index,  key) =>
+             <div>
+               <Chip
+                 label={`${index['guest'].firstName} ${index['guest'].lastName}`}
+                 key={key}
+                 onClick={() => this.handleChipClick(index)}
+                 onDelete={this.handleChipClick}
+                 className="chip"
+                 deleteIcon={<img alt="" src={checkIn} />}
+               />
+             </div>
+             )}   
+           </div>
+          </div>
+         
+       </div>
+           }
         
         <Drawer className="drawer" anchor="right" open={this.state.openDrawer} >
           <div

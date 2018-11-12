@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,53 +11,14 @@ class AssignmentList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
     };
     this.id = 0;
-    this.loadGuests();
   }
-
-  createData(name, calories, fat, carbs, protein) {
-    this.id += 1;
-    let r = this.id;
-    return { r, name, calories, fat, carbs, protein };
-  }
-
-  loadGuests = () => {
-    const query = `{
-      shob(uid:"1b630e90-d122-11e8-ac31-3f9e7cf66502") {
-        data {
-          hotelID
-          masterID
-          roomType
-          roomNumber
-          adultCount
-          childCount
-          infantCount
-          bookingFrom
-          bookingTo
-          state
-          guest{
-            firstName
-            lastName
-          }
-        } 
-       }
-    }`;
-    axios({
-     method: 'post' ,
-     url: 'http://localhost:3007/graphql?query='+ query,
-   }).then(res => {
-     console.log('aaaaaaaaaaaaaaaaa',res.data.data.shob)
-     this.setState({'data': res.data.data.shob.data});
-   })
-     .catch(function (error) {
-         console.log(error);
-     });
-   }
+  
 
   render() {
-    const {data} = this.state;
+    console.log('11111111',this.props.data)
+    const {data} = this.props;
     return (
       <div className="assignment-list">
         <div className="title">GUEST</div>

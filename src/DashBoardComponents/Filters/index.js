@@ -9,19 +9,23 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './Filters.scss';
 
 class Filters extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      range: 7,
+      value: 'All',
+    };
+  }
   
-  state = {
-    time: 10,
-    name: 'hai',
-    value: 'female',
-  };
 
   handleSelectChange = event => {
-    this.setState({ time: event.target.value });
+    this.setState({ range: event.target.value });
+    this.props.onChangeRange(event.target.value);
   };
 
   handleRadioChange = event => {
     this.setState({ value: event.target.value });
+    this.props.onChangeStatus(event.target.value);
   };
 
   render() {
@@ -30,11 +34,11 @@ class Filters extends React.Component {
           <div className="date-range">
             <div className="rangeTxt">DATE RANGE</div>
             <Select
-              value={this.state.time}
+              value={this.state.range}
               onChange={this.handleSelectChange}>
-              <MenuItem value={10}>1 week</MenuItem>
-              <MenuItem value={20}>2 weeks</MenuItem>
-              <MenuItem value={30}>3 weeks</MenuItem>
+              <MenuItem value={7}>1 week</MenuItem>
+              <MenuItem value={14}>2 weeks</MenuItem>
+              <MenuItem value={21}>3 weeks</MenuItem>
             </Select>
           </div>
           <div className="filter">
