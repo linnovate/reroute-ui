@@ -11,6 +11,11 @@ import Filters from './DashBoardComponents/Filters';
 
 import './DashBoard.css';
 
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+});
 
 class DashBoard extends React.Component {
   constructor(props) {
@@ -20,11 +25,12 @@ class DashBoard extends React.Component {
       date: '',
       range: 7,
       status: 'All',
-      filterData : null
+      filteredData : null
     };
     this.changeRange = this.changeRange.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
     this.data = null;
+    // window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
   }
 
   loadResults(){
@@ -83,20 +89,20 @@ class DashBoard extends React.Component {
       }
       else if (status === 'CheckOut')
         tmp = this.state.data.filter(t => new Date(t.bookingTo).toDateString() === new Date(this.state.date).toDateString());
-       this.setState({'filterData': tmp});
+       this.setState({'filteredData': tmp});
     }
   }
 
   render(){
     return (
-      <MuiThemeProvider theme="">
+      <MuiThemeProvider theme={theme}>
         <div className="side-bar">
           <div className="logo">Guest Monitoring</div>
           <Filters onChangeRange={this.changeRange} onChangeStatus={this.changeStatus}></Filters>
         </div>
         <div className="section">
-            <GuestHealth data={this.state.status !== 'All' ? this.state.filterData : this.state.data} status={this.state.status} date={this.state.date}></GuestHealth>
-            <AssignmentList data={this.state.status !== 'All' ? this.state.filterData : this.state.data}></AssignmentList>
+            <GuestHealth data={this.state.status !== 'All' ? this.state.filteredData : this.state.data} status={this.state.status} date={this.state.date}></GuestHealth>
+            <AssignmentList data={this.state.status !== 'All' ? this.state.filteredData : this.state.data}></AssignmentList>
         </div>
       </MuiThemeProvider>
     );

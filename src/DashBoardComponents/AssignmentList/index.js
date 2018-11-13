@@ -12,12 +12,9 @@ class AssignmentList extends React.Component {
     super(props);
     this.state = {
     };
-    this.id = 0;
   }
   
-
   render() {
-    console.log('11111111',this.props.data)
     const {data} = this.props;
     return (
       <div className="assignment-list">
@@ -36,7 +33,7 @@ class AssignmentList extends React.Component {
           <TableBody>
             {data.map(row => {
               return (
-                <TableRow key={row.id}>
+                <TableRow key={row.masterID}>
                   <TableCell className="health" padding="checkbox"><div>20</div><div className="white"></div></TableCell>
                   <TableCell className="name"><div>{`${row.guest.firstName} ${row.guest.lastName}`}</div ><div className="white"></div></TableCell>
                   <TableCell className="id"><div className="white">{row.masterID}</div><div></div></TableCell>

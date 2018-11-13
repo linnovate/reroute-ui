@@ -16,12 +16,13 @@ class GuestHealth extends React.Component {
         openDrawer: false,
         data: [],
         currentGuest:'',
-        byDate: {},
-        filterData: []
+        byDate: {}
       };
       this.handleChipClick = this.handleChipClick.bind(this);
+      this.buildData = this.buildData.bind(this);
       this.closeDrawer = this.closeDrawer.bind(this);
       this.currentDate = '';
+      this.byDate = {};
   }
 
   handleChipClick(index){
@@ -32,8 +33,22 @@ class GuestHealth extends React.Component {
     this.setState({'openDrawer': true});
   }
 
-  buildDataByDate(data){
-    let byDate = {};
+  buildData(d, data, currentDate){
+    let tmpDate = new Date(currentDate).setHours(0,0,0,0)
+    if (new Date(d) >= new Date(tmpDate)) {
+      if (new Date(d).toDateString().replace(/ /g,"-") in this.byDate) {
+        this.byDate[new Date(d).toDateString().replace(/ /g,"-")].push(data);
+      }
+      else {
+        this.byDate[new Date(d).toDateString().replace(/ /g,"-")] = [];
+        this.byDate[new Date(d).toDateString().replace(/ /g,"-")].push(data);
+      }
+    }
+  }
+
+  buildDataByDate(data, currentDate){
+    this.byDate = {};
+    let that = this;
     data.forEach(function(d){
       var date1 = new Date(d.bookingFrom);
       var date2 = new Date(d.bookingTo);
@@ -41,33 +56,21 @@ class GuestHealth extends React.Component {
       date2.setHours(24,0,0,0);
       var timeDiff = Math.abs(date2.getTime() - date1.getTime());
       var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      if (new Date(d.bookingFrom).toDateString().replace(/ /g,"-") in byDate) {
-        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
-      }
-      else {
-        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")] = [];
-        byDate[new Date(d.bookingFrom).toDateString().replace(/ /g,"-")].push(d);
-      }
+      that.buildData(d.bookingFrom, d, currentDate);
+      let that2 = that;
+      //push to byDays array all the days the guest appear
       for(let i = 1;i < diffDays; i++) {
-        //push to byDays array all the days the guest appear
         let newTmp = new Date(d.bookingFrom).setDate(new Date(d.bookingFrom).getDate() +i);
-        if (new Date(newTmp).toDateString().replace(/ /g,"-") in byDate) {
-          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")].push(d);
-        }
-        else {
-          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")] = [];
-          byDate[new Date(newTmp).toDateString().replace(/ /g,"-")].push(d);
-        }
+        that2.buildData(newTmp, d, currentDate);
       }
     })
-    this.setState({'byDate': byDate});
-    console.log('byDate array',byDate)
+    this.setState({'byDate': this.byDate});
   }
 
   componentWillReceiveProps(nextProps){
     this.currentDate = nextProps.date;
      if (this.props.data !== nextProps.data){
-      this.buildDataByDate(nextProps.data)
+      this.buildDataByDate(nextProps.data, nextProps.date)
     }
   }
 
@@ -77,7 +80,7 @@ class GuestHealth extends React.Component {
 
   componentWillMount(){
     if (this.props.data)
-      this.buildDataByDate(this.props.data)
+      this.buildDataByDate(this.props.data, this.props.date)
     this.currentDate = this.props.date;
   }
 
@@ -91,7 +94,7 @@ class GuestHealth extends React.Component {
         <div className="title">GUEST HEALTH</div>
             {this.props.status === 'All' ?
              <div className="main-wrapper by-days">
-             { Object.keys(this.state.byDate).map(key =>  
+             { Object.keys(this.state.byDate).map(key => 
              <div className="wrapper-flex-colomn">
                 <div className="wrapper-tags">
                 {this.state.byDate[key].map((index,  key2) =>

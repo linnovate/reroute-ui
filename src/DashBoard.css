@@ -4,6 +4,7 @@
     color: white;
 }
 .side-bar {
+    color: white !important;
     flex: 1;
     width: 20%;
     flex-grow: 1;

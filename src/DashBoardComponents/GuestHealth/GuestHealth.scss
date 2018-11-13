@@ -9,12 +9,21 @@
     padding: 1px 0.3vw;
     font-size: 1vw;
     background: rgba(235, 87, 87, 0.05);
+    &:hover {
+      background: #EB5757;
+    }
+    & > :hover {
+      color: white;
+    }
     span::first-letter {
       text-transform: uppercase;
     }
     span {
       color: #EB5757;
       width: 100%;
+      &:hover {
+        color: white;
+      }
     }
     img {
       margin: -4px 4px 0 -8px !important;
