@@ -1,15 +1,25 @@
 .date-range {
+  display: flex;
+  position: relative;
   height: 100%;
-  padding: 6px;
+  padding: 12px;
   font-size: 15px;
   margin: 0 2vw 40px;
   background: #3075D1;
   border: 1px solid #8DBEFF;
+  .rangeTxt{
+    width: 45%;
+    color: #8DBEFF;
+  }
+  #selectDate{
+    width: 64%;
+    margin-left: 0.5vw;
+    background: url(/static/media/tringle.0f2cfebd.svg) no-repeat 90%;}
 }
 .MuiInputBase-root-21 {
   width: 9vw;
   padding-left: 0.5vw;
-  color: white !important;
+  // color: white !important;
   &:before {
       border: none !important;
   }
@@ -17,19 +27,30 @@
     border: none !important;
   }
 }
-.rangeTxt {
-  display: inline-block;
-  height: 100%;
-  color: #8DBEFF;
-  padding-left: 0.1vw;
-  font-size: 0.8vw;
-}
 .MuiSelect-icon-7 {
   color: white !important;
 }
 .filter {
   direction: ltr;
   margin: 0 2vw 40px;
+  .group span {
+    color: white !important;
+  }
+}
+.custom-range {
+  padding: 6px;
+  font-size: 15px;
+  margin: 0 2vw 40px;
+  .dateRange {
+    flex-direction: row;
+    align-items: baseline;
+    label {
+      position: inherit;
+      width: 6vw;
+      font-size: 1.2vw;
+      // color: white;
+    }
+  }
 }
 .filter .MuiRadio-colorPrimary-64.MuiRadio-checked-62 {
     color: white;
@@ -43,4 +64,18 @@
 .filter .MuiTypography-body1-88 {
     color: white;
     font-size: 1.1vw;
+}
+#menu- {
+  display: none;
+}
+#render-props-popover {
+  left: 0;
+  right: 0;
+  .button {
+    color: #2F80ED;
+    float: right;
+    border: 1px solid #2F80ED;
+    margin: 8px;
+    padding: 0px;
+  }
 }

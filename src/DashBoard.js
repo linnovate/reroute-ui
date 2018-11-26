@@ -1,5 +1,6 @@
 import React from 'react';
-import axios from 'axios';
+
+import DATA from './DashBoardComponents/data';
 
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -25,18 +26,25 @@ class DashBoard extends React.Component {
       date: '',
       range: 7,
       status: 'All',
-      filteredData : null
+      filteredData : null,
+      dateChanged: false,
+      masterID: null
     };
     this.changeRange = this.changeRange.bind(this);
     this.changeStatus = this.changeStatus.bind(this);
+    this.changeCustomRange = this.changeCustomRange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.changeStatus = this.changeStatus.bind(this);
+    this.markThisGuest = this.markThisGuest.bind(this);
     this.data = null;
     // window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
   }
 
   loadResults(){
     const query = `{
-      shob(uid:"1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: ${this.state.range}) {
+      shob(uid:"1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: ${this.state.range},dateFrom: "${this.state.date}") {
         data {
+          bookID
           hotelID
           masterID
           roomType
@@ -50,29 +58,33 @@ class DashBoard extends React.Component {
           guest{
             firstName
             lastName
+            gender
           }
         } 
       date
        }
-     }`;
-     axios({
-      method: 'post' ,
-      url: 'http://localhost:3007/graphql?query='+ query,
-    }).then(res => {
+      }`;
+    new DATA('post', query).then(res => {
+      this.date = res.data.data.shob.date;
       this.setState({
         data: res.data.data.shob.data,
-        date: res.data.data.shob.date
+        date: !this.state.date ? res.data.data.shob.date: this.state.date
        });
-    })
-      .catch(function (error) {
-          console.log(error);
-      });
-  }
+      }),function(err) {
+      console.log('err',err);
+   }
+  };
 
   componentDidMount(){
     this.loadResults();
   }
 
+  handleDateChange() {
+    this.setState({
+      'dateChanged':false,
+      'date':''
+    });
+  }
 
   changeRange(range){
     this.setState({'range':range},function(){
@@ -81,28 +93,45 @@ class DashBoard extends React.Component {
   }
 
   changeStatus(status){
-    this.setState({'status': status});
-    if (status === 'CheckIn' || status === 'CheckOut') {
-      let tmp = null; 
-      if (status === 'CheckIn') {
-        tmp = this.state.data.filter(t => new Date(t.bookingFrom).toDateString() === new Date(this.state.date).toDateString());
-      }
-      else if (status === 'CheckOut')
-        tmp = this.state.data.filter(t => new Date(t.bookingTo).toDateString() === new Date(this.state.date).toDateString());
-       this.setState({'filteredData': tmp});
-    }
+    this.setState({ 'status': status })
+  }
+
+  changeCustomRange(key, value){
+    if (key === 'from')
+      this.setState({'date': value, 'dateChanged': true});
+    else this.setState({'range': value, 'dateChanged': true});
+  }
+
+  markThisGuest(masterID){
+    this.setState({masterID});
   }
 
   render(){
+    console.log('444444444444',this.state.date)
     return (
       <MuiThemeProvider theme={theme}>
         <div className="side-bar">
           <div className="logo">Guest Monitoring</div>
-          <Filters onChangeRange={this.changeRange} onChangeStatus={this.changeStatus}></Filters>
+          <Filters
+           onChangeRange={this.changeRange} 
+           onChangeStatus={this.changeStatus} 
+           currentDate={this.state.date} 
+           onChangeCustomRange={this.changeCustomRange} 
+           updateDateChange ={this.handleDateChange}></Filters>
         </div>
         <div className="section">
-            <GuestHealth data={this.state.status !== 'All' ? this.state.filteredData : this.state.data} status={this.state.status} date={this.state.date}></GuestHealth>
-            <AssignmentList data={this.state.status !== 'All' ? this.state.filteredData : this.state.data}></AssignmentList>
+          <GuestHealth 
+            data={this.state.data} 
+            status={this.state.status} 
+            date={this.state.date} 
+            range={this.state.range} 
+            dateChanged={this.state.dateChanged}
+            onMarkThisGuest={this.markThisGuest}>
+          </GuestHealth>
+          <AssignmentList 
+            data={this.state.data}
+            currentGuest={this.state.masterID}>
+          </AssignmentList>
         </div>
       </MuiThemeProvider>
     );

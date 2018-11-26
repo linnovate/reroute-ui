@@ -33,10 +33,10 @@ class AssignmentList extends React.Component {
           <TableBody>
             {data.map(row => {
               return (
-                <TableRow key={row.masterID}>
+                <TableRow key={row.masterID} className={row.masterID === this.props.currentGuest? 'selected': ''}>
                   <TableCell className="health" padding="checkbox"><div>20</div><div className="white"></div></TableCell>
                   <TableCell className="name"><div>{`${row.guest.firstName} ${row.guest.lastName}`}</div ><div className="white"></div></TableCell>
-                  <TableCell className="id"><div className="white">{row.masterID}</div><div></div></TableCell>
+                  <TableCell className="id"><div>{row.masterID}</div ><div className="white"></div></TableCell>
                   <TableCell>
                     <div className="status"> 
                       <div className="circle"></div>

@@ -19,6 +19,8 @@
       width: 90px;
       height: 90px;
       margin-right: 1.5vw;
+      border-radius: 50%;
+      border: 1px solid #EB5757;  
     }
     .name {
       font-size: 1.3vw;
@@ -36,8 +38,8 @@
     padding: 0;
     
     .detail {
-      margin: 14px 2vw 14px 2vw;
-      width: 10vw;
+      margin: 14px 1vw 14px 2vw;
+      width: 11vw;
       .icon {
         color: #BDBDBD;
         text-transform: uppercase;
@@ -77,27 +79,6 @@
       padding: 1.3vw;
       font-size: 0.9vw;
       font-weight: 600;
-    }
-  }
-  .list {
-    div {
-      margin: 0.5vw;
-      padding: 1vw;
-    }
-    .green {
-      color: #219653;
-      background: rgba(153, 233, 166, 0.11);
-      border: 1px solid #219653;
-    }
-    .red {
-      color: #EB5757;
-      background: rgba(255, 195, 195, 0.11);
-      border: 1px solid #EB5757;
-    }
-    .gray {
-      color: #A5A1A1;
-      background: #F8F8F8;
-      border: 1px solid #A5A1A1;
     }
   }
 }

@@ -1,11 +1,9 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Drawer from '@material-ui/core/Drawer';
-import moment from 'moment';
-
 import DrawerProfile from './../DrawerProfile';
+import DATA from '../data';
 
-import checkIn from './../../assets/img/checkIn.svg'
 
 import './GuestHealth.scss';
 
@@ -15,22 +13,52 @@ class GuestHealth extends React.Component {
       this.state = {
         openDrawer: false,
         data: [],
-        currentGuest:'',
-        byDate: {}
+        currentMasterId: null,
+        byDate: {},
       };
       this.handleChipClick = this.handleChipClick.bind(this);
       this.buildData = this.buildData.bind(this);
       this.closeDrawer = this.closeDrawer.bind(this);
       this.currentDate = '';
-      this.byDate = {};
+  }
+
+  //real code:
+  // container(taskID: "${bookID}") {
+
+  loadResults(bookID, callback){
+    const query = `{
+      container(taskID: "5bd6c2a300e97029f891c54f") {
+          container {
+            title
+            description
+          }
+          actionsList {
+            title
+            description
+        }
+       }
+      }`;
+    new DATA('post', query).then(res => {
+      callback(res.data.data.container);
+    }),function(err) {
+      console.log('err',err);
+   }
   }
 
   handleChipClick(index){
+    console.log('index',index);
+    this.props.onMarkThisGuest(index.masterID);
     this.currentGuest = index;
-    this.currentGuest.bookingFrom = moment(this.currentGuest.bookingFrom).format('MMMM Do YYYY');
-    this.currentGuest.bookingTo = moment(this.currentGuest.bookingTo).format('MMMM Do YYYY');
-    if (!this.currentGuest.roomNumber) this.currentGuest.roomNumber = '';
-    this.setState({'openDrawer': true});
+    let that = this;
+    this.loadResults(index.bookID, function(data){
+      that.currentGuest.containers =  data;
+      that.setState({                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+        'openDrawer': true,
+        'currentMasterId': index.masterID
+      });
+    },function error(err){
+     console.log(err);
+    });
   }
 
   buildData(d, data, currentDate){
@@ -46,7 +74,7 @@ class GuestHealth extends React.Component {
     }
   }
 
-  buildDataByDate(data, currentDate){
+  buildDataByDate(data, currentDate, range, status){
     this.byDate = {};
     let that = this;
     data.forEach(function(d){
@@ -56,88 +84,87 @@ class GuestHealth extends React.Component {
       date2.setHours(24,0,0,0);
       var timeDiff = Math.abs(date2.getTime() - date1.getTime());
       var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      that.buildData(d.bookingFrom, d, currentDate);
-      let that2 = that;
-      //push to byDays array all the days the guest appear
-      for(let i = 1;i < diffDays; i++) {
-        let newTmp = new Date(d.bookingFrom).setDate(new Date(d.bookingFrom).getDate() +i);
-        that2.buildData(newTmp, d, currentDate);
+      if (status === 'CheckOut')
+        that.buildData(d.bookingTo, d, currentDate);
+      else that.buildData(d.bookingFrom, d, currentDate);
+      // push to byDays array all the days the guest appear
+      if (status === 'All') {
+        let thatFunc = that;
+        for ( let i = 1;i < diffDays; i++ ) {
+          let newTmp = new Date(d.bookingFrom).setDate(new Date(d.bookingFrom).getDate() + i);
+          let tmpRange = new Date(currentDate);
+          tmpRange = tmpRange.setDate(tmpRange.getDate() + range);
+          if (newTmp <= tmpRange) {
+            thatFunc.buildData(new Date(newTmp).toDateString(), d, currentDate);
+          }                         
+        }
       }
     })
     this.setState({'byDate': this.byDate});
+    console.log('bydate',this.byDate)
   }
 
   componentWillReceiveProps(nextProps){
     this.currentDate = nextProps.date;
-     if (this.props.data !== nextProps.data){
-      this.buildDataByDate(nextProps.data, nextProps.date)
+     if (this.props.data !== nextProps.data  || this.props.date !== nextProps.date || this.props.status !== nextProps.status){
+      this.buildDataByDate(nextProps.data, nextProps.date, nextProps.range, nextProps.status);
     }
   }
 
   closeDrawer(){
-    this.setState({'openDrawer': false});
-  }
+    this.setState({
+      'openDrawer': false,
+      'currentMasterId': null
+    });
+    this.props.onMarkThisGuest(null);
+  };
 
   componentWillMount(){
-    if (this.props.data)
-      this.buildDataByDate(this.props.data, this.props.date)
-    this.currentDate = this.props.date;
-  }
+    // if (this.props.data)
+    //   this.buildDataByDate(this.props.data, this.props.date,  this.props.range)
+    // this.currentDate = this.props.date;
+  };
 
   shouldComponentUpdate(nextProps, nextState) {
     return true;
-  }
+  };
 
-  render() { 
+  renderLabel(index){
+    return <div>
+      <p>{index['guest'].firstName} {index['guest'].lastName}</p>
+      {index.roomNumber ? 
+        <p>{`room no: ${index.roomNumber}`}</p> :
+        <p>{`book no: ${index.masterID}`}</p> 
+      }
+    </div>
+  };
+
+  render() {
     return (
       <div className="guest-health">
         <div className="title">GUEST HEALTH</div>
-            {this.props.status === 'All' ?
              <div className="main-wrapper by-days">
              { Object.keys(this.state.byDate).map(key => 
-             <div className="wrapper-flex-colomn">
+             <div key={key} className="wrapper-flex-colomn">
                 <div className="wrapper-tags">
                 {this.state.byDate[key].map((index,  key2) =>
-                <div>
+                <div key={key2}>
                   <Chip
-                    label={`${index['guest'].firstName} ${index['guest'].lastName}`}
-                    key={key}
+                    label={this.renderLabel(index)}
                     onClick={() => this.handleChipClick(index)}
-                    onDelete={this.handleChipClick}
-                    className="chip"
-                    deleteIcon={<img alt="" src={checkIn} />}
-                  />
+                    className={`chip ${index.masterID === this.state.currentMasterId ? 'selected': ''}`}
+                  ></Chip>
                 </div>
                 )}   
               </div>
               <div className="tag char">|</div>
               <div className="tag">{`${new Date(key).getDate()}/${new Date(key).getMonth()+1} `}
-              {`${new Date(key).toDateString() === new Date(this.currentDate).toDateString() ? `TODAY`: ``}`}</div> 
+              {`${new Date(key).toDateString() === new Date().toDateString() ? `TODAY`: ``}`}</div> 
              </div>
             
             )}
           </div>
-          :  
-          <div className="main-wrapper">
-          <div className="wrapper-flex-colomn">
-             <div className="wrapper-tags">
-             {this.props.data.map((index,  key) =>
-             <div>
-               <Chip
-                 label={`${index['guest'].firstName} ${index['guest'].lastName}`}
-                 key={key}
-                 onClick={() => this.handleChipClick(index)}
-                 onDelete={this.handleChipClick}
-                 className="chip"
-                 deleteIcon={<img alt="" src={checkIn} />}
-               />
-             </div>
-             )}   
-           </div>
-          </div>
          
-       </div>
-           }
         
         <Drawer className="drawer" anchor="right" open={this.state.openDrawer} >
           <div

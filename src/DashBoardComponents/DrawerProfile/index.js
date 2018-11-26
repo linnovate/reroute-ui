@@ -2,8 +2,14 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import moment from 'moment';
 
-import profile from '../../assets/img/profile.svg';
+import CheckList from '../CheckList';
+
+import profileMan from '../../assets/img/man.png';
+import profileWoman from '../../assets/img/woman.png';
+import profile from '../../assets/img/anonymy.png';
+
 import close from '../../assets/img/close.svg';
 
 import './DrawerProfile.scss';
@@ -20,10 +26,25 @@ class DrawerProfile extends React.Component {
 
   closeDrawer(){
       this.props.closeDrawer();
-  }
+  };
 
   handleTabChange = (event, value) => {
     this.setState({ value });
+  };
+
+  setTitle(guest) {
+    if (!guest.gender) {
+      this.avatar = profile;
+      return '';
+    } 
+    else if (guest.gender === 'M'){
+      this.avatar = profileMan;
+      return 'Mr.';
+    } 
+       else {
+        this.avatar = profileWoman; 
+        return 'Mrs.' 
+       }
   };
 
   formatPeople(adults, children, infants) {
@@ -38,7 +59,7 @@ class DrawerProfile extends React.Component {
         people.push(parseInt(infants, 10) + ' ' + (parseInt(infants, 10) > 1 ? 'infants' : 'infant'));
     }
     return people.join(' + ');
-  }
+  };
 
   render() {
     return (
@@ -47,26 +68,26 @@ class DrawerProfile extends React.Component {
        <div className="details">
         <Avatar
           alt="Adelle Charles"
-          src={profile}
+          src={this.avatar}
           className="avatar"
         />
         <div>
-          <div className="name">{`Mr. ${this.props.data.guest.firstName} ${this.props.data.guest.lastName}`}</div>
+          <div className="name">{this.setTitle(this.props.data)} {` ${this.props.data.guest.firstName} ${this.props.data.guest.lastName}`}</div>
           <div className="index">{this.props.data.masterID}</div>
         </div>
        </div>
        <div className="roomDetails">
          <div className="detail">
            <div className="icon one">check-in</div>
-           <span>{this.props.data.bookingFrom}</span>
+           <span>{moment(this.props.data.bookingFrom).format('MMMM Do YYYY')}</span>
          </div>
          <div className="detail">
            <div className="icon two">check-out</div>
-           <span>{this.props.data.bookingTo}</span>
+           <span>{moment(this.props.data.bookingTo).format('MMMM Do YYYY')}</span>
          </div>
          <div className="detail">
            <div className="icon three">room</div>
-           <span>{`${this.props.data.roomType} ${this.props.data.roomNumber}`}</span>
+           <span>{`${this.props.data.roomType} ${this.props.data.roomNumber? this.props.data.roomNumber : ''}`}</span>
          </div>
          <div className="detail">
            <div className="icon four">guests</div>
@@ -82,13 +103,8 @@ class DrawerProfile extends React.Component {
             <Tab className="tab" value={1} label="Alerts" />
           </Tabs>
           {this.state.value === 0 && 
-          <div className="list">
-            <div className="green">Reservation Created</div>
-            <div className="red">Reservation connected to App</div>
-            <div className="gray">Credit Card authorized</div>
-            <div className="green">Key Issue</div>
-            <div className="green">Reservation Created</div>
-          </div>}
+            <CheckList actions={this.props.data.containers}></CheckList>
+          }
           {this.state.value === 1 && <div>Item Two</div>}
       </div>
     )

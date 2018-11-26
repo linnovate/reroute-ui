@@ -52,6 +52,11 @@
           border-right: 0 solid #E0E0E0;
         }
       }
+      .selected td {
+        background: #EB5757;
+        color: white;
+        border-right: 1px solid #E0E0E0;
+      }
       .health {
         background: #EB5757;
         color: white;
