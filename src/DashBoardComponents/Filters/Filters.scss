@@ -15,6 +15,7 @@
     width: 64%;
     margin-left: 0.5vw;
     background: url(/static/media/tringle.0f2cfebd.svg) no-repeat 90%;}
+    cursor: pointer;
 }
 .MuiInputBase-root-21 {
   width: 9vw;
@@ -77,5 +78,8 @@
     border: 1px solid #2F80ED;
     margin: 8px;
     padding: 0px;
+  }
+  li {
+    width: 12vw !important;
   }
 }

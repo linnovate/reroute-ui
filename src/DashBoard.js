@@ -4,7 +4,8 @@ import DATA from './DashBoardComponents/data';
 
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
-
+import client from './apolloClient';
+import gql from 'graphql-tag';
 
 import GuestHealth from './DashBoardComponents/GuestHealth';
 import AssignmentList from './DashBoardComponents/AssignmentList';
@@ -41,34 +42,31 @@ class DashBoard extends React.Component {
   }
 
   loadResults(){
-    const query = `{
-      shob(uid:"1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: ${this.state.range},dateFrom: "${this.state.date}") {
-        data {
-          bookID
-          hotelID
-          masterID
-          roomType
-          roomNumber
-          adultCount
-          childCount
-          infantCount
-          bookingFrom
-          bookingTo
-          state
-          guest{
-            firstName
-            lastName
-            gender
+      client.query({
+        query: gql`
+        {
+          shob(rootUid: "1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: 7 ,dateFrom:"11/11/2018"){
+       
+            date
+            data {
+              masterID
+               roomType
+                arrivalDate
+                hotelID
+                guest {
+                  firstName
+                  lastName
+                  email
+                }
+              
+            }
           }
-        } 
-      date
-       }
-      }`;
-    new DATA('post', query).then(res => {
-      this.date = res.data.data.shob.date;
+        }`
+      }).then(res => {
+      this.date = res.data.shob.date;
       this.setState({
-        data: res.data.data.shob.data,
-        date: !this.state.date ? res.data.data.shob.date: this.state.date
+        data: res.data.shob.data,
+        date: !this.state.date ? res.data.shob.date: this.state.date
        });
       }),function(err) {
       console.log('err',err);

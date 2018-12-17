@@ -2,6 +2,8 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import Drawer from '@material-ui/core/Drawer';
 import DrawerProfile from './../DrawerProfile';
+import client from '../../apolloClient';
+import gql from 'graphql-tag';
 import DATA from '../data';
 
 
@@ -26,20 +28,23 @@ class GuestHealth extends React.Component {
   // container(taskID: "${bookID}") {
 
   loadResults(bookID, callback){
-    const query = `{
-      container(taskID: "5bd6c2a300e97029f891c54f") {
+    client.query({
+      query: gql`
+      {
+        containers(taskID:""){
           container {
             title
             description
-          }
-          actionsList {
+            
+          } 
+          actionList{
             title
-            description
+          }
         }
-       }
-      }`;
-    new DATA('post', query).then(res => {
-      callback(res.data.data.container);
+      }`
+    }).then(res => {
+      console.log('rrrrrrr',res)
+      callback(res.data.containers);
     }),function(err) {
       console.log('err',err);
    }
@@ -120,22 +125,23 @@ class GuestHealth extends React.Component {
   };
 
   componentWillMount(){
-    // if (this.props.data)
-    //   this.buildDataByDate(this.props.data, this.props.date,  this.props.range)
-    // this.currentDate = this.props.date;
+    if (this.props.data)
+      this.buildDataByDate(this.props.data, this.props.date,  this.props.range)
+    this.currentDate = this.props.date;
   };
 
   shouldComponentUpdate(nextProps, nextState) {
     return true;
   };
 
+  onMouseover (e) {
+    console.log('eeeeeeee',e.target)
+    e.target.value = 'rrrr'
+  }
+
   renderLabel(index){
-    return <div>
-      <p>{index['guest'].firstName} {index['guest'].lastName}</p>
-      {index.roomNumber ? 
-        <p>{`room no: ${index.roomNumber}`}</p> :
-        <p>{`book no: ${index.masterID}`}</p> 
-      }
+    return <div onMouseEnter={this.onMouseover.bind(this)}>
+      {index['guest'].firstName} {index['guest'].lastName}
     </div>
   };
 

@@ -19,20 +19,36 @@ class Filters extends React.Component {
       value: 'All',
       customRange: false,
       currentDate: '',
-      customRangeTo: null,
-      customRangeFrom: null,
+      customRangeTo: '',
+      customRangeFrom: '',
       open: false
     };
+    this.diffDays;
     this.handleDateToChange = this.handleDateToChange.bind(this);
     this.handleDateFromChange = this.handleDateFromChange.bind(this);
     this.handleSelectChange1 = this.handleSelectChange1.bind(this);
-
+    this.closePopover = this.closePopover.bind(this);
+    this.arrRange = {
+      7: '1 Week',
+      14: '2 Week',
+      30: '1 Month',
+      1: 'custom'
+    }
   }
+  
+  
 
   componentWillReceiveProps(nextProps){
     if(nextProps.currentDate !== this.props.currentDate){
       let date = this.buildDateFormat(nextProps.currentDate);
-      this.setState({'currentDate': date});
+      if (this.props.currentDate === '')
+        this.setState({
+          'customRangeFrom': date,
+          'customRangeTo': date
+        });
+      this.setState({
+        'currentDate': date,
+      });
     }
   }
 
@@ -79,9 +95,9 @@ class Filters extends React.Component {
     this.setState({'customRangeFrom': date});
     var date1 = this.state.customRangeTo ? new Date(this.state.customRangeTo) : new Date(this.state.currentDate);
     var date2 = new Date(event.target.value);
-    var diffDays = this.buildDiff(date1, date2); 
-    this.props.onChangeRange(diffDays);
-    this.props.onChangeCustomRange('from', event.target.value);
+    this.diffDays = this.buildDiff(date1, date2); 
+    // this.props.onChangeRange(diffDays);
+    // this.props.onChangeCustomRange('from', event.target.value);
   }
 
   handleDateToChange = event => {
@@ -89,17 +105,30 @@ class Filters extends React.Component {
     this.setState({'customRangeTo': date});
     var date1 = this.state.customRangeFrom ? new Date(this.state.customRangeFrom):new Date(this.state.currentDate);
     var date2 = new Date(event.target.value);
-    var diffDays = this.buildDiff(date1, date2); 
-    this.props.onChangeRange(diffDays);
-    this.props.onChangeCustomRange('to', diffDays);
+    this.diffDays = this.buildDiff(date1, date2); 
+    // this.props.onChangeRange(diffDays);
+    // this.props.onChangeCustomRange('to', diffDays);
   }
 
   handleSelectChange1 = event => {
-    this.setState({
-      anchorEl: document.getElementsByClassName('date-range')[0],
-      open: true
-    });
+    if(this.state.open === false){
+      this.setState({
+        anchorEl: document.getElementsByClassName('date-range')[0],
+        open: true
+      });
+     }    
   };
+
+  closePopover = () => {
+    this.setState({'open': false});
+  }  
+
+  handleDateChange = (diffDays) => {
+    console.log('eeeeeeeee',this.diffDays)
+    this.props.onChangeRange(this.diffDays);
+    this.props.onChangeCustomRange('from', this.state.customRangeFrom);
+    this.setState({'open': false});
+  }
 
   render() {
     console.log('in render',this.state.currentDate)
@@ -109,9 +138,9 @@ class Filters extends React.Component {
             <div className="rangeTxt">DATE RANGE</div>
             <div
               id="selectDate"
-              value={this.state.range+"xdsd"}
+              value={this.state.range}
               onClick={(e)=>this.handleSelectChange1(e)}
-              >{this.state.range}wwww
+              >{this.arrRange[this.state.range] ?this.arrRange[this.state.range]: 'custom'}
             <Popover
               anchorEl={this.state.anchorEl}
               id="render-props-popover"
@@ -128,7 +157,7 @@ class Filters extends React.Component {
               <MenuItem value={7} onClick={(e)=>this.handleSelectChange(e)}>1 week</MenuItem>
               <MenuItem value={14} onClick={(e)=>this.handleSelectChange(e)}>2 weeks</MenuItem>
               <MenuItem value={30} onClick={(e)=>this.handleSelectChange(e)}>1 month</MenuItem>
-              <MenuItem value={1} onClick={(e)=>this.setState({'customRange':true})}>custom</MenuItem>
+              <MenuItem value={1} onClick={(e)=>this.setState({'customRange':true, 'open': true})}>custom</MenuItem>
               {this.state.customRange &&
               <MenuItem value={0}>
               <TextField
@@ -137,7 +166,6 @@ class Filters extends React.Component {
                   type="date"
                   onChange={this.handleDateFromChange}
                   value = {this.state.customRangeFrom}
-                  defaultValue={this.state.currentDate}
                   className={'dateRange'}
                   InputLabelProps={{
                     shrink: true,
@@ -153,7 +181,6 @@ class Filters extends React.Component {
                   label="To"
                   type="date"
                   value = {this.state.customRangeTo}
-                  defaultValue={this.state.currentDate}
                   className={'dateRange'}
                   InputLabelProps={{
                     shrink: true,
@@ -162,10 +189,16 @@ class Filters extends React.Component {
                   </MenuItem>     
               }  
                {this.state.customRange &&
-                <Button color="primary" className={'button'}  onClick={this.handleDateToChange}
+               <div>
+                <Button color="primary" className={'button'}  onClick={this.handleDateChange}
                 >
                 OK
               </Button>
+                <Button color="primary" className={'button'}  onClick={this.closePopover}
+                >
+                Cancel
+              </Button>
+              </div>
                }   
                 </Popover>
                 </div>
@@ -178,8 +211,8 @@ class Filters extends React.Component {
               onChange={this.handleRadioChange}
             >
               <FormControlLabel value="All" control={<Radio color="primary"/>} label="All" />
-              <FormControlLabel value="CheckIn" control={<Radio color="primary"/>} label="CheckIn" />
-              <FormControlLabel value="CheckOut" control={<Radio color="primary"/>} label="CheckOut" />
+              <FormControlLabel value="CheckIn" control={<Radio color="primary"/>} label="Arrivals" />
+              <FormControlLabel value="CheckOut" control={<Radio color="primary"/>} label="Departures" />
             </RadioGroup>
           </FormControl>
           </div>
@@ -189,3 +222,5 @@ class Filters extends React.Component {
 }
 
 export default Filters;
+
+
