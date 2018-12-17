@@ -146,6 +146,7 @@ class GuestHealth extends React.Component {
   };
 
   render() {
+    console.log('in render ggggggggg')
     return (
       <div className="guest-health">
         <div className="title">GUEST HEALTH</div>

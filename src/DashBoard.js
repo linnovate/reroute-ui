@@ -45,13 +45,14 @@ class DashBoard extends React.Component {
       client.query({
         query: gql`
         {
-          shob(rootUid: "1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: 7 ,dateFrom:"11/11/2018"){
+          shob(rootUid: "1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: 7 ,dateFrom:"${this.state.date}"){
        
             date
             data {
               masterID
                roomType
-                arrivalDate
+               bookingFrom
+               bookingTo
                 hotelID
                 guest {
                   firstName
