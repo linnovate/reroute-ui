@@ -1,17 +1,17 @@
 import React from 'react';
-
-import DATA from './DashBoardComponents/data';
+import client from './apolloClient';
+import gql from 'graphql-tag';
+import DATA from './Components/data';
 
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import { createMuiTheme } from '@material-ui/core/styles';
-import client from './apolloClient';
-import gql from 'graphql-tag';
 
-import GuestHealth from './DashBoardComponents/GuestHealth';
-import AssignmentList from './DashBoardComponents/AssignmentList';
-import Filters from './DashBoardComponents/Filters';
 
-import './DashBoard.css';
+import GuestHealth from './Components/GuestHealth';
+import AssignmentList from './Components/AssignmentList';
+import Filters from './Components/Filters';
+
+import '../src/components/DashBoard.css';
 
 const theme = createMuiTheme({
   typography: {
@@ -41,38 +41,39 @@ class DashBoard extends React.Component {
     // window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
   }
 
-  loadResults(){
-      client.query({
+
+  loadResults = () => {
+    client.query({
         query: gql`
         {
-          shob(rootUid: "1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: 7 ,dateFrom:"${this.state.date}"){
-       
+          shob(rootUid: "1b630e90-d122-11e8-ac31-3f9e7cf66502",dateRange: ${this.state.range} ,dateFrom: "${this.state.date}"){
             date
             data {
               masterID
-               roomType
-               bookingFrom
-               bookingTo
-                hotelID
-                guest {
-                  firstName
-                  lastName
-                  email
-                }
-              
+              roomType
+              arrivalDate
+              hotelID
+              bookingFrom
+              bookingTo
+              guest {
+                firstName
+                lastName
+                email
+              }
             }
           }
         }`
-      }).then(res => {
+    }).then(res => {
+      console.log('333333333',res)
       this.date = res.data.shob.date;
       this.setState({
         data: res.data.shob.data,
         date: !this.state.date ? res.data.shob.date: this.state.date
-       });
-      }),function(err) {
-      console.log('err',err);
-   }
-  };
+      });
+      });
+  }
+
+
 
   componentDidMount(){
     this.loadResults();
